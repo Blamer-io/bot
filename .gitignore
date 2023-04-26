@@ -24,7 +24,7 @@ hs_err_pid*
 
 # for IntelliJidea users
 .idea
-
+*.iml
 **/.DS_Store
 
 target
