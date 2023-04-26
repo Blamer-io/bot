@@ -1,11 +1,7 @@
 architect:
-  - # your GitHub nickname
+  - l3r8yJ
+docker:
+  image: l3r8y/rultor-image:1.0.3
 merge:
   script:
     - "mvn clean install --errors --batch-mode"
-release:
-  pre: false
-  script: |-
-    [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
-    git commit -am "${tag}"
-    # add your release pipeline
