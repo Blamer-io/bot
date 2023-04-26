@@ -43,6 +43,7 @@ SOFTWARE.
     <sa-tan.version>0.1.5</sa-tan.version>
     <maven-checkstyle-plugin.version>3.2.2</maven-checkstyle-plugin.version>
     <checkstyle.version>8.15</checkstyle.version>
+    <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
   </properties>
   <dependencies>
     <dependency>
@@ -97,6 +98,17 @@ SOFTWARE.
               <artifactId>lombok</artifactId>
             </exclude>
           </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-surefire-plugin.version}</version>
+        <configuration>
+          <systemPropertyVariables>
+            <BOT_TOKEN>6018071095:AAEUVFjD3U3jNp1atDfVdJ2qxUsdkprCfMU</BOT_TOKEN>
+            <BOT_NAME>blamer_dev_io_bot</BOT_NAME>
+          </systemPropertyVariables>
         </configuration>
       </plugin>
       <plugin>
