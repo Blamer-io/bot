@@ -28,3 +28,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-jdk-${{ matrix.java }}-maven-
       - run: mvn clean install --errors --batch-mode
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          BOT_BAME: ${{ secrets.BOT_NAME }}
+
