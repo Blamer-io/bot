@@ -92,7 +92,7 @@ public class Bot extends TelegramLongPollingBot {
   public void onUpdateReceived(final Update update) {
     if (update.hasMessage()) {
       final MessageGenerator generator =
-        this.generators.get(update.getMessage().getText());
+        this.generators.get(update.getMessage().getText().split(" ")[0]);
       if (null == generator) {
         return;
       }
