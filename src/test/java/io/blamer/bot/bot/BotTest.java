@@ -1,6 +1,7 @@
 package io.blamer.bot.bot;
 
 import io.blamer.bot.configuration.BotConfiguration;
+import java.util.Collections;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ class BotTest {
     final String name = "blamer";
     Mockito.when(config.getToken()).thenReturn(token);
     Mockito.when(config.getName()).thenReturn(name);
-    final Bot bot = new Bot(config, null);
+    final Bot bot = new Bot(config, Collections.emptyMap());
     MatcherAssert.assertThat(
       "Bot token in right format",
       bot.getBotToken(),
