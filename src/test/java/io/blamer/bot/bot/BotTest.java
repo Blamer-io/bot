@@ -4,11 +4,13 @@ import io.blamer.bot.configuration.BotConfiguration;
 import java.util.Collections;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
 @ExtendWith(MockitoExtension.class)
 class BotTest {
@@ -30,5 +32,12 @@ class BotTest {
       bot.getBotUsername(),
       Matchers.equalTo(name)
     );
+  }
+
+  @Test
+  void reactsOnUpdateReceived(@Mock final Update update,
+                              @Mock final BotConfiguration config) {
+    final Bot bot = new Bot(config, Collections.emptyMap());
+    Assertions.assertDoesNotThrow(() -> bot.onUpdateReceived(update));
   }
 }
