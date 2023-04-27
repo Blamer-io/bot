@@ -22,25 +22,22 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.bot;
+package io.blamer.bot.answer.generator.impl;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
+import io.blamer.bot.answer.generator.MessageGenerator;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
 
-@Component
-@RequiredArgsConstructor
-public class BotInitializer {
-
-    private final Bot bot;
-
-    @EventListener({ContextRefreshedEvent.class})
-    public void initializeBot() throws TelegramApiException {
-        final TelegramBotsApi api = new TelegramBotsApi(DefaultBotSession.class);
-        api.registerBot(this.bot);
+@Component("/token")
+public class TokenMessageGenerator implements MessageGenerator {
+    @Override
+    public SendMessage messageFromUpdate(Update update) {
+        final SendMessage message = new SendMessage();
+        message.setChatId(update.getMessage().getChatId());
+        message.setReplyMarkup(new ForceReplyKeyboard());
+        message.setText("You need to provide me GitHub token with notifications access! Send it in next message");
+        return message;
     }
 }

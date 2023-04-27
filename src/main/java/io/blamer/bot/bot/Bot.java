@@ -24,6 +24,7 @@
 
 package io.blamer.bot.bot;
 
+import io.blamer.bot.answer.generator.MessageGenerator;
 import io.blamer.bot.configuration.BotConfiguration;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -35,39 +36,42 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.Map;
+
 @Slf4j
 @Service
 public class Bot extends TelegramLongPollingBot {
 
     private final BotConfiguration configuration;
 
-    public Bot(BotConfiguration configuration) throws TelegramApiException {
+    private final Map<String, MessageGenerator> generators;
+
+
+    public Bot(
+        final BotConfiguration configuration,
+        final Map<String, MessageGenerator> generators
+    ) throws TelegramApiException {
         this.configuration = configuration;
+        this.generators = generators;
         this.execute(
             new SetMyCommands(
                 configuration.commands(),
                 new BotCommandScopeDefault(),
-                null)
+                null
+            )
         );
     }
 
     @SneakyThrows
     @Override
     public void onUpdateReceived(final Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            final String msg = update.getMessage().getText();
-            final long chat = update.getMessage().getChatId();
-            /*
-            * @todo #1 Remove this test implementation.
-            *   Need to manage message command handling like it's described here:
-            *   https://www.youtube.com/watch?v=61duchvKI6o&t=2349s
-            * */
-            if (msg.equals("/start")) {
-                final SendMessage message = new SendMessage();
-                message.setChatId(chat);
-                message.setText("Hi, I'm my name is Blamer!");
-                this.execute(message);
+        if (update.hasMessage()) {
+            final MessageGenerator generator = generators.get(update.getMessage().getText());
+            if (null == generator) {
+                return;
             }
+            final SendMessage message = generator.messageFromUpdate(update);
+            this.execute(message);
         }
     }
 
