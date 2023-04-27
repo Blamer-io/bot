@@ -113,10 +113,8 @@ public class RegistryMessageGenerator implements MessageGenerator {
     final String text,
     final String chat
   ) {
-    SendMessage result;
     final String notFound = "Token not found in %s".formatted(text);
     RegistryMessageGenerator.log.debug(notFound);
-    result = new SendMessage(chat, notFound);
-    return result;
+    return new SendMessage(chat, notFound);
   }
 }
