@@ -88,7 +88,10 @@ public class RegistryMessageGenerator implements MessageGenerator {
    *
    * @return A SendMessage object
    */
-  private static SendMessage resultFrom(String chat, String token) {
+  private static SendMessage resultFrom(
+    final String chat,
+    final String token
+  ) {
     return new SendMessage(
       chat,
       "Registry token doesn't available yet, sorry. Your token: '%s'"
@@ -97,16 +100,21 @@ public class RegistryMessageGenerator implements MessageGenerator {
   }
 
   /**
-   * The resultWithError function is a helper function that returns a SendMessage object with the
-   * text &quot;Token not found in %s&quot;.formatted(text) and the chat ID of chat.
+   * The resultWithError function is a helper function that
+   * returns a SendMessage object with the
+   * text &quot;Token not found in %s&quot;.formatted(text)
+   * and the chat ID of chat.
    * <p>
    *
    * @param text Provide the user with a message about what went wrong
    * @param chat Specify the chat id of the user that sent the message
    *
-   * @return A SendMessage object with the text &quot;token not found in %s&quot;
+   * @return A SendMessage object
    */
-  private static SendMessage resultWithError(String text, String chat) {
+  private static SendMessage resultWithError(
+    final String text,
+    final String chat
+  ) {
     SendMessage result;
     final String notFound = "Token not found in %s".formatted(text);
     RegistryMessageGenerator.log.debug(notFound);
