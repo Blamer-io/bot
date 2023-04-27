@@ -27,28 +27,32 @@ package io.blamer.bot.answer.generator.impl;
 import io.blamer.bot.answer.generator.MessageGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-
+/*
+* @todo #19 Refactor this class, to send messages into hub
+* */
 /**
  * Start conversation.
  */
 @Slf4j
 @Component("/registry")
+@PropertySource("classpath:answers.properties")
 public class RegistryMessageGenerator implements MessageGenerator {
 
   /**
    * The command.
    */
-  @Value("${bot.answers.registry.command}")
+  @Value("${answers.registry.command}")
   private String command;
 
   /**
    * Command description.
    */
-  @Value("${bot.answers.registry.description}")
+  @Value("${answers.registry.description}")
   private String description;
 
   /*
@@ -57,12 +61,16 @@ public class RegistryMessageGenerator implements MessageGenerator {
    * */
   @Override
   public SendMessage messageFromUpdate(final Update update) {
-    final String token = RegistryMessageGenerator.detachToken(update);
-    return new SendMessage(
-      update.getMessage().getChatId().toString(),
-      "Registry token doesn't available yet, sorry. Your token: '%s'"
-        .formatted(token)
-    );
+    SendMessage result;
+    final String text = update.getMessage().getText();
+    final String chat = update.getMessage().getChatId().toString();
+    try {
+      final String token = text.split(" ")[1];
+      result = resultFrom(chat, token);
+    } catch (final ArrayIndexOutOfBoundsException ex) {
+      result = resultWithError(text, chat);
+    }
+    return result;
   }
 
   @Override
@@ -71,20 +79,38 @@ public class RegistryMessageGenerator implements MessageGenerator {
   }
 
   /**
-   * Detaches token form messages like this.
-   * <pre>/registry token</pre>
+   * The resultFrom function takes a chat and token as parameters,
+   * then returns a SendMessage object with the chat ID and message text.
+
    *
-   * @param update The update to get token
-   * @return Result as string
+   * @param chat Send the message to a specific chat
+   * @param token Pass the token to the resultfrom function
+   *
+   * @return A SendMessage object
    */
-  private static String detachToken(final Update update) {
-    final String text = update.getMessage().getText();
-    try {
-      return text.split(" ")[1];
-    } catch (final ArrayIndexOutOfBoundsException ex) {
-      final String notFound = "Token not found in %s".formatted(text);
-      RegistryMessageGenerator.log.debug(notFound);
-      return notFound;
-    }
+  private static SendMessage resultFrom(String chat, String token) {
+    return new SendMessage(
+      chat,
+      "Registry token doesn't available yet, sorry. Your token: '%s'"
+        .formatted(token)
+    );
+  }
+
+  /**
+   * The resultWithError function is a helper function that returns a SendMessage object with the
+   * text &quot;Token not found in %s&quot;.formatted(text) and the chat ID of chat.
+   * <p>
+   *
+   * @param text Provide the user with a message about what went wrong
+   * @param chat Specify the chat id of the user that sent the message
+   *
+   * @return A SendMessage object with the text &quot;token not found in %s&quot;
+   */
+  private static SendMessage resultWithError(String text, String chat) {
+    SendMessage result;
+    final String notFound = "Token not found in %s".formatted(text);
+    RegistryMessageGenerator.log.debug(notFound);
+    result = new SendMessage(chat, notFound);
+    return result;
   }
 }

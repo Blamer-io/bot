@@ -26,6 +26,7 @@ package io.blamer.bot.answer.generator.impl;
 
 import io.blamer.bot.answer.generator.MessageGenerator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -36,24 +37,25 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboa
  * Token conversation.
  */
 @Component("/token")
+@PropertySource("classpath:answers.properties")
 public class TokenMessageGenerator implements MessageGenerator {
 
   /**
    * Answer message.
    */
-  @Value("${bot.answers.token.message}")
+  @Value("${answers.token.message}")
   private String message;
 
   /**
    * The command.
    */
-  @Value("${bot.answers.token.command}")
+  @Value("${answers.token.command}")
   private String command;
 
   /**
    * Command description.
    */
-  @Value("${bot.answers.token.description}")
+  @Value("${answers.token.description}")
   private String description;
 
   @Override

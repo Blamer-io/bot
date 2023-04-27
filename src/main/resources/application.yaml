@@ -1,15 +1,3 @@
 bot:
   token: ${BOT_TOKEN}
   name: ${BOT_NAME}
-  answers:
-    start:
-      command: /start
-      description: Just start command
-      message: Hi, i'm a Blamer!
-    token:
-      command: /token
-      description: Set GitHub token to get updates
-      message: You need to provide me GitHub token with notifications access! Send it with /registry your_token
-    registry:
-      command: /registry
-      description: Set GitHub token to get updates

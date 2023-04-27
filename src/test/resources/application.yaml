@@ -1,15 +1,3 @@
 bot:
   token: ${BOT_TOKEN}
   name: ${BOT_NAME}
-  answers:
-    start:
-      command: /start
-      description: test start description
-      message: test start message
-    token:
-      command: /token
-      description: test token description
-      message: test token message
-    registry:
-      command: /registry
-      description: test registry

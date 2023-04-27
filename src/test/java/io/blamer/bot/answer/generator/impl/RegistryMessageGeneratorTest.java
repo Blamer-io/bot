@@ -34,6 +34,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
@@ -60,12 +61,26 @@ class RegistryMessageGeneratorTest {
     }
 
     @Test
+    void createsRegistryMessageWithError(@Mock final Update update, @Mock final Message message) {
+        final String expected = "Token not found in /registry";
+        Mockito.when(message.getText()).thenReturn("/registry");
+        Mockito.when(update.getMessage()).thenReturn(message);
+        final SendMessage actual = messageGenerator.messageFromUpdate(update);
+        Assertions.assertNotNull(actual);
+        MatcherAssert.assertThat(
+            "Response contains right text",
+            actual.getText(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
     void createsBotCommand() {
         final BotCommand actual = this.messageGenerator.messageAsBotCommand();
         MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/registry"));
         MatcherAssert.assertThat(
             actual.getDescription(),
-            Matchers.equalTo("test registry")
+            Matchers.equalTo("test registry description")
         );
     }
 }
