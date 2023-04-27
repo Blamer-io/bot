@@ -39,19 +39,24 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 @ExtendWith(MockitoExtension.class)
 class StartMessageGeneratorTest {
 
-    @Test
-    void createsStartMessage(@Mock final Update update, @Mock final Message message) {
-        Mockito.when(update.getMessage()).thenReturn(message);
-        Assertions.assertNotNull(new StartMessageGenerator().messageFromUpdate(update));
-    }
+  @Test
+  void createsStartMessage(@Mock final Update update, @Mock final Message message) {
+    Mockito.when(update.getMessage()).thenReturn(message);
+    Assertions.assertNotNull(new StartMessageGenerator().messageFromUpdate(update));
+    MatcherAssert.assertThat(
+      "Response contains right text",
+      new StartMessageGenerator().messageFromUpdate(update).getText(),
+      Matchers.equalTo("Hi, I'm my name is Blamer!")
+    );
+  }
 
-    @Test
-    void createsDescription() {
-        final BotCommand actual = new StartMessageGenerator().messageAsBotCommand();
-        MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/start"));
-        MatcherAssert.assertThat(
-            actual.getDescription(),
-            Matchers.equalTo("Just start command")
-        );
-    }
+  @Test
+  void createsDescription() {
+    final BotCommand actual = new StartMessageGenerator().messageAsBotCommand();
+    MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/start"));
+    MatcherAssert.assertThat(
+      actual.getDescription(),
+      Matchers.equalTo("Just start command")
+    );
+  }
 }

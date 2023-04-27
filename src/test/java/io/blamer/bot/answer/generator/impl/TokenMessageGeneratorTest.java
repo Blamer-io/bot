@@ -39,19 +39,26 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 @ExtendWith(MockitoExtension.class)
 class TokenMessageGeneratorTest {
 
-    @Test
-    void createsStartMessage(@Mock final Update update, @Mock final Message message) {
-        Mockito.when(update.getMessage()).thenReturn(message);
-        Assertions.assertNotNull(new TokenMessageGenerator().messageFromUpdate(update));
-    }
+  @Test
+  void createsStartMessage(@Mock final Update update, @Mock final Message message) {
+    Mockito.when(update.getMessage()).thenReturn(message);
+    Assertions.assertNotNull(new TokenMessageGenerator().messageFromUpdate(update));
+    MatcherAssert.assertThat(
+      "Response in context right text",
+      new TokenMessageGenerator().messageFromUpdate(update).getText(),
+      Matchers.equalTo(
+        "You need to provide me GitHub token with notifications access! Send it in next message"
+      )
+    );
+  }
 
-    @Test
-    void createsDescription() {
-        final BotCommand actual = new TokenMessageGenerator().messageAsBotCommand();
-        MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/token"));
-        MatcherAssert.assertThat(
-            actual.getDescription(),
-            Matchers.equalTo("Set GitHub token to get updates")
-        );
-    }
+  @Test
+  void createsDescription() {
+    final BotCommand actual = new TokenMessageGenerator().messageAsBotCommand();
+    MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/token"));
+    MatcherAssert.assertThat(
+      actual.getDescription(),
+      Matchers.equalTo("Set GitHub token to get updates")
+    );
+  }
 }

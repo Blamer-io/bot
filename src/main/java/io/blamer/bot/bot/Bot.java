@@ -72,7 +72,7 @@ public class Bot extends TelegramLongPollingBot {
   void addCommandsDescriptions() throws TelegramApiException {
     this.execute(
       new SetMyCommands(
-        generators.values()
+        this.generators.values()
           .stream()
           .map(MessageGenerator::messageAsBotCommand)
           .toList(),
