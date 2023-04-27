@@ -38,6 +38,10 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Map;
 
+/*
+* @todo #4 Find way to test this
+*   Need to find a proper way to test telegram bot logic.
+* */
 @Slf4j
 @Service
 public class Bot extends TelegramLongPollingBot {

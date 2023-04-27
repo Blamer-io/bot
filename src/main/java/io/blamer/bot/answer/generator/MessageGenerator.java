@@ -27,7 +27,10 @@ package io.blamer.bot.answer.generator;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-
+/*
+* @todo #4 Bad naming
+*   We got -or suffix in interface naming, should be refactored
+* */
 /**
  * This interface created for solution of infinity switch-case.
  * <pre>{@code
