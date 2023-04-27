@@ -82,7 +82,7 @@ SOFTWARE.
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <telegrambots-spring-boot-starter.version>6.5.0</telegrambots-spring-boot-starter.version>
     <jacoco-maven-plugin.version>0.8.9</jacoco-maven-plugin.version>
-    <jtcop-maven-plugin.version>0.1.11</jtcop-maven-plugin.version>
+    <jtcop-maven-plugin.version>0.1.9</jtcop-maven-plugin.version>
     <sa-tan.version>0.1.5</sa-tan.version>
     <maven-checkstyle-plugin.version>3.2.2</maven-checkstyle-plugin.version>
     <checkstyle.version>8.15</checkstyle.version>
