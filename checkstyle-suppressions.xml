@@ -30,7 +30,7 @@ SOFTWARE.
   <suppress checks="DesignForExtension" files=".*\.java$" lines="0-9999"/>
   <suppress checks="HideUtilityClassConstructor" files="BotApplicationEntry.java" lines="0-9999"/>
   <suppress checks="FinalClass" files=".*\.java$" lines="0-9999"/>
-  <!--@todo #16 move message text to properties
+  <!-- @todo #16 move message text to properties
   we need to move message text to properties as a value for a given key
    -->
   <suppress checks="LineLength" files="TokenMessageGenerator.java" lines="45"/>
