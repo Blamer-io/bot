@@ -15,12 +15,19 @@ class BotTest {
   @Test
   void createsBotWithConfig(@Mock final BotConfiguration config) {
     final String token = "dummy token";
+    final String name = "blamer";
     Mockito.when(config.getToken()).thenReturn(token);
+    Mockito.when(config.getName()).thenReturn(name);
     final Bot bot = new Bot(config, null);
     MatcherAssert.assertThat(
-      "Token in right format",
+      "Bot token in right format",
       bot.getBotToken(),
       Matchers.equalTo(token)
+    );
+    MatcherAssert.assertThat(
+      "Bot name in right format",
+      bot.getBotUsername(),
+      Matchers.equalTo(name)
     );
   }
 }
