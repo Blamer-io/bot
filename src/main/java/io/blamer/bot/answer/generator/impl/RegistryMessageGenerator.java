@@ -57,7 +57,7 @@ public class RegistryMessageGenerator implements MessageGenerator {
 
   /*
    * @todo #19 After hub service will be created, redirect the token.
-   *   Send auth message to hub.
+   *   Send auth message to hub, to process the data.
    * */
   @Override
   public SendMessage messageFromUpdate(final Update update) {
