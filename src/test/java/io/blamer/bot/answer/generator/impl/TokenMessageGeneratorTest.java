@@ -24,6 +24,7 @@
 
 package io.blamer.bot.answer.generator.impl;
 
+import annotation.TestWithSpringContext;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -32,33 +33,36 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
+@TestWithSpringContext
 @ExtendWith(MockitoExtension.class)
 class TokenMessageGeneratorTest {
+
+  @Autowired
+  private TokenMessageGenerator tokenMessageGenerator;
 
   @Test
   void createsStartMessage(@Mock final Update update, @Mock final Message message) {
     Mockito.when(update.getMessage()).thenReturn(message);
-    Assertions.assertNotNull(new TokenMessageGenerator().messageFromUpdate(update));
+    Assertions.assertNotNull(this.tokenMessageGenerator.messageFromUpdate(update));
     MatcherAssert.assertThat(
       "Response in context right text",
-      new TokenMessageGenerator().messageFromUpdate(update).getText(),
-      Matchers.equalTo(
-        "You need to provide me GitHub token with notifications access! Send it in next message"
-      )
+      this.tokenMessageGenerator.messageFromUpdate(update).getText(),
+      Matchers.equalTo("test token message")
     );
   }
 
   @Test
   void createsDescription() {
-    final BotCommand actual = new TokenMessageGenerator().messageAsBotCommand();
+    final BotCommand actual = this.tokenMessageGenerator.messageAsBotCommand();
     MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/token"));
     MatcherAssert.assertThat(
       actual.getDescription(),
-      Matchers.equalTo("Set GitHub token to get updates")
+      Matchers.equalTo("test token description")
     );
   }
 }

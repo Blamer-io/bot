@@ -1,9 +1,9 @@
 package io.blamer.bot;
 
+import annotation.TestWithSpringContext;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@TestWithSpringContext
 class BotApplicationEntryTest {
 
 	@Test

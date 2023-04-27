@@ -25,6 +25,7 @@
 package io.blamer.bot.answer.generator.impl;
 
 import io.blamer.bot.answer.generator.MessageGenerator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -36,16 +37,34 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 @Component("/start")
 public class StartMessageGenerator implements MessageGenerator {
 
+  /**
+   * Answer message.
+   */
+  @Value("${bot.answers.start.message}")
+  private String message;
+
+  /**
+   * The command.
+   */
+  @Value("${bot.answers.start.command}")
+  private String command;
+
+  /**
+   * Command description.
+   */
+  @Value("${bot.answers.start.description}")
+  private String description;
+
   @Override
   public SendMessage messageFromUpdate(final Update update) {
     final SendMessage message = new SendMessage();
     message.setChatId(update.getMessage().getChatId());
-    message.setText("Hi, I'm my name is Blamer!");
+    message.setText(this.message);
     return message;
   }
 
   @Override
   public BotCommand messageAsBotCommand() {
-    return new BotCommand("/start", "Just start command");
+    return new BotCommand(this.command, this.description);
   }
 }

@@ -24,6 +24,7 @@
 
 package io.blamer.bot.answer.generator.impl;
 
+import annotation.TestWithSpringContext;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -32,31 +33,38 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
+@TestWithSpringContext
 @ExtendWith(MockitoExtension.class)
 class StartMessageGeneratorTest {
+
+  @Autowired
+  private StartMessageGenerator messageGenerator;
 
   @Test
   void createsStartMessage(@Mock final Update update, @Mock final Message message) {
     Mockito.when(update.getMessage()).thenReturn(message);
-    Assertions.assertNotNull(new StartMessageGenerator().messageFromUpdate(update));
+    Assertions.assertNotNull(messageGenerator.messageFromUpdate(update));
     MatcherAssert.assertThat(
       "Response contains right text",
-      new StartMessageGenerator().messageFromUpdate(update).getText(),
-      Matchers.equalTo("Hi, I'm my name is Blamer!")
+      messageGenerator.messageFromUpdate(update).getText(),
+      Matchers.equalTo("test start message")
     );
   }
 
   @Test
   void createsDescription() {
-    final BotCommand actual = new StartMessageGenerator().messageAsBotCommand();
+    final BotCommand actual = this.messageGenerator.messageAsBotCommand();
     MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/start"));
     MatcherAssert.assertThat(
       actual.getDescription(),
-      Matchers.equalTo("Just start command")
+      Matchers.equalTo("test start description")
     );
   }
 }

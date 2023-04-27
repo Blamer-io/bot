@@ -25,6 +25,7 @@
 package io.blamer.bot.answer.generator.impl;
 
 import io.blamer.bot.answer.generator.MessageGenerator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -37,19 +38,37 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboa
 @Component("/token")
 public class TokenMessageGenerator implements MessageGenerator {
 
+  /**
+   * Answer message.
+   */
+  @Value("${bot.answers.token.message}")
+  private String message;
+
+  /**
+   * The command.
+   */
+  @Value("${bot.answers.token.command}")
+  private String command;
+
+  /**
+   * Command description.
+   */
+  @Value("${bot.answers.token.description}")
+  private String description;
+
   @Override
   public SendMessage messageFromUpdate(final Update update) {
     final SendMessage message = new SendMessage();
     message.setChatId(update.getMessage().getChatId());
-    message.setReplyMarkup(new ForceReplyKeyboard());
-    message.setText(
-      "You need to provide me GitHub token with notifications access! Send it in next message"
-    );
+    final ForceReplyKeyboard markup = new ForceReplyKeyboard();
+    markup.setInputFieldPlaceholder("/registry YOUR_TOKEN");
+    message.setReplyMarkup(markup);
+    message.setText(this.message);
     return message;
   }
 
   @Override
   public BotCommand messageAsBotCommand() {
-    return new BotCommand("/token", "Set GitHub token to get updates");
+    return new BotCommand(this.command, this.description);
   }
 }
