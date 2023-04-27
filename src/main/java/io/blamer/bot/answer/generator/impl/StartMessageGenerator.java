@@ -59,10 +59,10 @@ public class StartMessageGenerator implements MessageGenerator {
 
   @Override
   public SendMessage messageFromUpdate(final Update update) {
-    final SendMessage message = new SendMessage();
-    message.setChatId(update.getMessage().getChatId());
-    message.setText(this.message);
-    return message;
+    return new SendMessage(
+      update.getMessage().getChatId().toString(),
+      this.message
+    );
   }
 
   @Override
