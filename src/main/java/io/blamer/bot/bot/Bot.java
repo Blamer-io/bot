@@ -26,6 +26,8 @@ package io.blamer.bot.bot;
 
 import io.blamer.bot.answer.generator.MessageGenerator;
 import io.blamer.bot.configuration.BotConfiguration;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,19 +46,20 @@ import java.util.Map;
 * */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class Bot extends TelegramLongPollingBot {
 
     private final BotConfiguration configuration;
 
     private final Map<String, MessageGenerator> generators;
 
-
-    public Bot(
-        final BotConfiguration configuration,
-        final Map<String, MessageGenerator> generators
-    ) throws TelegramApiException {
-        this.configuration = configuration;
-        this.generators = generators;
+    /**
+     * Set list of commands.
+     *
+     * @throws TelegramApiException When something went wrong.
+     */
+    @PostConstruct
+    void addCommandsDescriptions() throws TelegramApiException {
         this.execute(
             new SetMyCommands(
                 generators.values()
