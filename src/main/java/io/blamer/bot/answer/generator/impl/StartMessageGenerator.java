@@ -25,7 +25,6 @@
 package io.blamer.bot.answer.generator.impl;
 
 import io.blamer.bot.answer.generator.MessageGenerator;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -36,7 +35,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
  */
 @Component("/start")
 public class StartMessageGenerator implements MessageGenerator {
-  @SneakyThrows
+
   @Override
   public SendMessage messageFromUpdate(final Update update) {
     final SendMessage message = new SendMessage();

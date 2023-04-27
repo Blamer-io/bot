@@ -36,6 +36,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboa
  */
 @Component("/token")
 public class TokenMessageGenerator implements MessageGenerator {
+
   @Override
   public SendMessage messageFromUpdate(final Update update) {
     final SendMessage message = new SendMessage();
