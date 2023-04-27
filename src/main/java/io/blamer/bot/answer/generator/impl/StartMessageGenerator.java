@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.generics.TelegramBot;
 
 @Component("/start")
@@ -41,5 +42,10 @@ public class StartMessageGenerator implements MessageGenerator {
         message.setChatId(update.getMessage().getChatId());
         message.setText("Hi, I'm my name is Blamer!");
         return message;
+    }
+
+    @Override
+    public BotCommand messageAsBotCommand() {
+        return new BotCommand("/start", "Just start command");
     }
 }

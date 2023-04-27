@@ -55,7 +55,10 @@ public class Bot extends TelegramLongPollingBot {
         this.generators = generators;
         this.execute(
             new SetMyCommands(
-                configuration.commands(),
+                generators.values()
+                    .stream()
+                    .map(MessageGenerator::messageAsBotCommand)
+                    .toList(),
                 new BotCommandScopeDefault(),
                 null
             )

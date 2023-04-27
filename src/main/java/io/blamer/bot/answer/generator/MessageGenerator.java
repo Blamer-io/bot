@@ -26,7 +26,43 @@ package io.blamer.bot.answer.generator;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
+/**
+ * This interface created for solution of infinity switch-case.
+ * <pre>{@code
+ * @Component("/example")
+ * public class ExampleMessageGenerator implements MessageGenerator {
+ *      @Override
+ *      public SendMessage messageFromUpdate(final Update update) {
+ *          final SendMessage sendMessage = new SendMessage();
+ *          sendMessage.setChatId(update.getMessage().getChatId());
+ *          sendMessage.setText("Text for message");
+ *          return sendMessage;
+ *      }
+ *
+ *      @Override
+ *      public BotCommand messageAsBotCommand() {
+ *          return new BotCommand("/example", "Description for example command")
+ *      }
+ * }
+ * }</pre>
+ * @implNote All implementations of this Interface <b>have to</b>
+ * be annotated with <code>@Component("/command")</code> annotation.
+ * Otherwise, it's just won't add a new command handling.
+ */
 public interface MessageGenerator {
+
+    /**
+     * Creates message to handle with specific command.
+     *
+     * @param update The update to handle
+     * @return SendMessage event
+     */
     SendMessage messageFromUpdate(Update update);
+
+    /**
+     * @return Description of this command.
+     */
+    BotCommand messageAsBotCommand();
 }

@@ -28,6 +28,7 @@ import io.blamer.bot.answer.generator.MessageGenerator;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
 
 @Component("/token")
@@ -39,5 +40,10 @@ public class TokenMessageGenerator implements MessageGenerator {
         message.setReplyMarkup(new ForceReplyKeyboard());
         message.setText("You need to provide me GitHub token with notifications access! Send it in next message");
         return message;
+    }
+
+    @Override
+    public BotCommand messageAsBotCommand() {
+        return new BotCommand("/token", "Set GitHub token to get updates");
     }
 }

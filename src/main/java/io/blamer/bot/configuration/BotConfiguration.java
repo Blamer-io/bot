@@ -66,16 +66,4 @@ public class BotConfiguration {
             this.token
         );
     }
-
-    /**
-     * Commands of bot with name and description.
-     *
-     * @return Description of commands as List
-     */
-    public List<BotCommand> commands() {
-        return List.of(
-            new BotCommand("/start", "Just starting command"),
-            new BotCommand("/token", "Set GitHub token to get updates")
-        );
-    }
 }
