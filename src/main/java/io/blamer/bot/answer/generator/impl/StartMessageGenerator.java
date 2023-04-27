@@ -27,25 +27,26 @@ package io.blamer.bot.answer.generator.impl;
 import io.blamer.bot.answer.generator.MessageGenerator;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import org.telegram.telegrambots.meta.generics.TelegramBot;
 
+/**
+ * Start conversation.
+ */
 @Component("/start")
 public class StartMessageGenerator implements MessageGenerator {
-    @SneakyThrows
-    @Override
-    public SendMessage messageFromUpdate(final Update update) {
-        final SendMessage message = new SendMessage();
-        message.setChatId(update.getMessage().getChatId());
-        message.setText("Hi, I'm my name is Blamer!");
-        return message;
-    }
+  @SneakyThrows
+  @Override
+  public SendMessage messageFromUpdate(final Update update) {
+    final SendMessage message = new SendMessage();
+    message.setChatId(update.getMessage().getChatId());
+    message.setText("Hi, I'm my name is Blamer!");
+    return message;
+  }
 
-    @Override
-    public BotCommand messageAsBotCommand() {
-        return new BotCommand("/start", "Just start command");
-    }
+  @Override
+  public BotCommand messageAsBotCommand() {
+    return new BotCommand("/start", "Just start command");
+  }
 }

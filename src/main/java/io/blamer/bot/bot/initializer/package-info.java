@@ -22,45 +22,11 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.configuration;
-
-import jakarta.annotation.PostConstruct;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-
 /**
- * Configuration for {@link io.blamer.bot.bot.Bot}.
- * Reads <i>bot</i> properties from <i>application.yaml</i>.
+ * Bot Initializer.
  *
+ * @author Aliaksei Bialiauski (abialiauski.dev@gmail.com)
  * @since 0.0.0
  */
-@Slf4j
-@Data
-@Configuration
-@ConfigurationProperties("bot")
-public class BotConfiguration {
 
-    /**
-     * Token for Telegram Bots API.
-     */
-    private String token;
-
-    /**
-     * Username in telegram.
-     */
-    private String name;
-
-    /**
-     * A method for checking which configuration is loaded.
-     */
-    @PostConstruct
-    void init() {
-        BotConfiguration.log.info(
-            "Bot configuration for '{}' loaded with token '{}'",
-            this.name,
-            this.token
-        );
-    }
-}
+package io.blamer.bot.bot.initializer;

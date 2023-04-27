@@ -22,16 +22,9 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot;
+/**
+ * @author Aliaksei Bialiauski (abialiauski.dev@gmail.com)
+ * @since 0.0.0
+ */
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-@SpringBootApplication
-public class BotApplication {
-
-	public static void main(final String[] args) {
-		SpringApplication.run(BotApplication.class, args);
-	}
-
-}
+package io.blamer.bot.answer.generator.impl;

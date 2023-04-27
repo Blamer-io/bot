@@ -50,7 +50,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
  *      }
  * }
  * }</pre>
- * @implNote All implementations of this Interface <b>have to</b>
+ * implNote All implementations of this Interface <b>have to</b>
  * be annotated with <code>@Component("/command")</code> annotation.
  * Otherwise, it's just won't add a new command handling.
  */

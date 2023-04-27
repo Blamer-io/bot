@@ -31,19 +31,24 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
 
+/**
+ * Token conversation.
+ */
 @Component("/token")
 public class TokenMessageGenerator implements MessageGenerator {
-    @Override
-    public SendMessage messageFromUpdate(Update update) {
-        final SendMessage message = new SendMessage();
-        message.setChatId(update.getMessage().getChatId());
-        message.setReplyMarkup(new ForceReplyKeyboard());
-        message.setText("You need to provide me GitHub token with notifications access! Send it in next message");
-        return message;
-    }
+  @Override
+  public SendMessage messageFromUpdate(final Update update) {
+    final SendMessage message = new SendMessage();
+    message.setChatId(update.getMessage().getChatId());
+    message.setReplyMarkup(new ForceReplyKeyboard());
+    message.setText(
+      "You need to provide me GitHub token with notifications access! Send it in next message"
+    );
+    return message;
+  }
 
-    @Override
-    public BotCommand messageAsBotCommand() {
-        return new BotCommand("/token", "Set GitHub token to get updates");
-    }
+  @Override
+  public BotCommand messageAsBotCommand() {
+    return new BotCommand("/token", "Set GitHub token to get updates");
+  }
 }

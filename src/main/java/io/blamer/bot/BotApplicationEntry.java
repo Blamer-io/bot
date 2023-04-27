@@ -22,45 +22,23 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.configuration;
+package io.blamer.bot;
 
-import jakarta.annotation.PostConstruct;
-import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * Configuration for {@link io.blamer.bot.bot.Bot}.
- * Reads <i>bot</i> properties from <i>application.yaml</i>.
- *
- * @since 0.0.0
+ * Entry class.
  */
-@Slf4j
-@Data
-@Configuration
-@ConfigurationProperties("bot")
-public class BotConfiguration {
+@SpringBootApplication
+public class BotApplicationEntry {
 
-    /**
-     * Token for Telegram Bots API.
-     */
-    private String token;
-
-    /**
-     * Username in telegram.
-     */
-    private String name;
-
-    /**
-     * A method for checking which configuration is loaded.
-     */
-    @PostConstruct
-    void init() {
-        BotConfiguration.log.info(
-            "Bot configuration for '{}' loaded with token '{}'",
-            this.name,
-            this.token
-        );
-    }
+  /**
+   * Entry point.
+   *
+   * @param args application arguments
+   */
+  public static void main(final String[] args) {
+    SpringApplication.run(BotApplicationEntry.class, args);
+  }
 }

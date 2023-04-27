@@ -41,57 +41,73 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.Map;
 
 /*
-* @todo #4 Find way to test this
-*   Need to find a proper way to test telegram bot logic.
-* */
+ * @todo #4 Find way to test this
+ *   Need to find a proper way to test telegram bot logic.
+ * */
+
+/**
+ * Bot.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class Bot extends TelegramLongPollingBot {
 
-    private final BotConfiguration configuration;
+  /**
+   * Configuration.
+   */
+  private final BotConfiguration configuration;
 
-    private final Map<String, MessageGenerator> generators;
+  /**
+   * Generators.
+   */
+  private final Map<String, MessageGenerator> generators;
 
-    /**
-     * Set list of commands.
-     *
-     * @throws TelegramApiException When something went wrong.
-     */
-    @PostConstruct
-    void addCommandsDescriptions() throws TelegramApiException {
-        this.execute(
-            new SetMyCommands(
-                generators.values()
-                    .stream()
-                    .map(MessageGenerator::messageAsBotCommand)
-                    .toList(),
-                new BotCommandScopeDefault(),
-                null
-            )
-        );
+  /**
+   * Set list of commands.
+   *
+   * @throws TelegramApiException When something went wrong.
+   */
+  @PostConstruct
+  void addCommandsDescriptions() throws TelegramApiException {
+    this.execute(
+      new SetMyCommands(
+        generators.values()
+          .stream()
+          .map(MessageGenerator::messageAsBotCommand)
+          .toList(),
+        new BotCommandScopeDefault(),
+        null
+      )
+    );
+  }
+
+  /**
+   * Update sync.
+   *
+   * @param update Received update
+   */
+  @SneakyThrows
+  @Override
+  public void onUpdateReceived(final Update update) {
+    if (update.hasMessage()) {
+      final MessageGenerator generator =
+        this.generators.get(update.getMessage().getText());
+      if (null == generator) {
+        return;
+      }
+      final SendMessage message = generator.messageFromUpdate(update);
+      this.execute(message);
     }
+  }
 
-    @SneakyThrows
-    @Override
-    public void onUpdateReceived(final Update update) {
-        if (update.hasMessage()) {
-            final MessageGenerator generator = generators.get(update.getMessage().getText());
-            if (null == generator) {
-                return;
-            }
-            final SendMessage message = generator.messageFromUpdate(update);
-            this.execute(message);
-        }
-    }
+  @Override
+  public String getBotUsername() {
+    return this.configuration.getName();
+  }
 
-    @Override
-    public String getBotUsername() {
-        return this.configuration.getName();
-    }
-
-    @Override
-    public String getBotToken() {
-        return this.configuration.getToken();
-    }
+  @Override
+  public String getBotToken() {
+    return this.configuration.getToken();
+  }
 }

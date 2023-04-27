@@ -33,15 +33,26 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+/**
+ * Bot initializer.
+ */
 @Component
 @RequiredArgsConstructor
 public class BotInitializer {
 
-    private final Bot bot;
+  /**
+   * Bot.
+   */
+  private final Bot bot;
 
-    @EventListener({ContextRefreshedEvent.class})
-    public void initializeBot() throws TelegramApiException {
-        final TelegramBotsApi api = new TelegramBotsApi(DefaultBotSession.class);
-        api.registerBot(this.bot);
-    }
+  /**
+   * Initializes the bot.
+   *
+   * @throws TelegramApiException if fails.
+   */
+  @EventListener({ContextRefreshedEvent.class})
+  public void initializeBot() throws TelegramApiException {
+    final TelegramBotsApi api = new TelegramBotsApi(DefaultBotSession.class);
+    api.registerBot(this.bot);
+  }
 }
