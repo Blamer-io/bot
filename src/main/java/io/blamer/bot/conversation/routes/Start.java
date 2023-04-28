@@ -22,50 +22,47 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.conversation;
+package io.blamer.bot.conversation.routes;
 
+import io.blamer.bot.conversation.Conversation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
 
 /**
- * Token conversation.
+ * Start conversation.
  */
-@Component("/token")
+@Component("/start")
 @PropertySource("classpath:answers.properties")
-public class Token implements Conversation {
+public class Start implements Conversation {
 
   /**
    * Answer message.
    */
-  @Value("${answers.token.message}")
+  @Value("${answers.start.message}")
   private String message;
 
   /**
    * The command.
    */
-  @Value("${answers.token.command}")
+  @Value("${answers.start.command}")
   private String command;
 
   /**
    * Command description.
    */
-  @Value("${answers.token.description}")
+  @Value("${answers.start.description}")
   private String description;
 
   @Override
   public SendMessage messageFromUpdate(final Update update) {
-    final SendMessage msg = new SendMessage();
-    msg.setChatId(update.getMessage().getChatId());
-    final ForceReplyKeyboard markup = new ForceReplyKeyboard();
-    markup.setInputFieldPlaceholder("/registry YOUR_TOKEN");
-    msg.setReplyMarkup(markup);
-    msg.setText(this.message);
-    return msg;
+    return new SendMessage(
+      String.valueOf(update.getMessage().getChatId()),
+      this.message
+    );
   }
 
   @Override

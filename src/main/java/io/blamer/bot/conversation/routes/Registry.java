@@ -22,8 +22,9 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.conversation;
+package io.blamer.bot.conversation.routes;
 
+import io.blamer.bot.conversation.Conversation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;

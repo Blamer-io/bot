@@ -23,6 +23,8 @@
  */
 
 /**
+ * Conversation.
+ *
  * @author Aliaksei Bialiauski (abialiauski.dev@gmail.com)
  * @since 0.0.0
  */

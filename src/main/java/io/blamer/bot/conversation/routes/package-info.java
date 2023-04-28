@@ -22,50 +22,11 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.conversation;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-
 /**
- * Start conversation.
+ * Conversation Routes.
+ *
+ * @author Aliaksei Bialiauski (abialiauski.dev@gmail.com)
+ * @since 0.0.0
  */
-@Component("/start")
-@PropertySource("classpath:answers.properties")
-public class Start implements Conversation {
 
-  /**
-   * Answer message.
-   */
-  @Value("${answers.start.message}")
-  private String message;
-
-  /**
-   * The command.
-   */
-  @Value("${answers.start.command}")
-  private String command;
-
-  /**
-   * Command description.
-   */
-  @Value("${answers.start.description}")
-  private String description;
-
-  @Override
-  public SendMessage messageFromUpdate(final Update update) {
-    return new SendMessage(
-      String.valueOf(update.getMessage().getChatId()),
-      this.message
-    );
-  }
-
-  @Override
-  public BotCommand messageAsBotCommand() {
-    return new BotCommand(this.command, this.description);
-  }
-}
+package io.blamer.bot.conversation.routes;

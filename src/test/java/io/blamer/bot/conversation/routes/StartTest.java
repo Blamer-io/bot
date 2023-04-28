@@ -22,9 +22,10 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.conversation;
+package io.blamer.bot.conversation.routes;
 
 import annotation.TestWithSpringContext;
+import io.blamer.bot.conversation.routes.Start;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
