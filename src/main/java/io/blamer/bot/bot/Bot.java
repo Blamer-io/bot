@@ -75,7 +75,7 @@ public class Bot extends TelegramLongPollingBot {
           .map(Conversation::messageAsBotCommand)
           .toList(),
         new BotCommandScopeDefault(),
-        null
+        "en"
       )
     );
   }
