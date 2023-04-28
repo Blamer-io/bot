@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,8 +36,18 @@ class TgBotTest {
 
   @Test
   void reactsOnUpdateReceived(@Mock final Update update,
-                              @Mock final ExtTg config) {
-    final TgBot bot = new TgBot(config, Collections.emptyMap());
+                              @Mock final ExtTg ext) {
+    final TgBot bot = new TgBot(ext, Collections.emptyMap());
+    Assertions.assertDoesNotThrow(() -> bot.onUpdateReceived(update));
+  }
+
+  @Test
+  void reactsOnUpdateWithMessage(@Mock final ExtTg ext) {
+    final TgBot bot = new TgBot(ext, Collections.emptyMap());
+    Update update = new Update();
+    final Message message = new Message();
+    message.setText("text");
+    update.setMessage(message);
     Assertions.assertDoesNotThrow(() -> bot.onUpdateReceived(update));
   }
 }

@@ -84,21 +84,16 @@ public class TgBot extends TelegramLongPollingBot {
     );
   }
 
-  /**
-   * Update sync.
-   *
-   * @param update Received update
-   */
   @SneakyThrows
   @Override
   public void onUpdateReceived(final Update update) {
     if (update.hasMessage()) {
-      final Conversation generator =
+      final Conversation conversation =
         this.conversations.get(update.getMessage().getText().split(" ")[0]);
-      if (null == generator) {
+      if (null == conversation) {
         return;
       }
-      final SendMessage message = generator.messageFromUpdate(update);
+      final SendMessage message = conversation.messageFromUpdate(update);
       this.execute(message);
     }
   }
