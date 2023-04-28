@@ -10,10 +10,10 @@
 [![docker.io](https://img.shields.io/docker/v/l3r8y/blamer-bot/latest)](https://hub.docker.com/repository/docker/l3r8y/blamer-bot/general)
 [![codecov](https://codecov.io/gh/Blamer-io/bot/branch/master/graph/badge.svg?token=CC9UR3TRCW)](https://codecov.io/gh/Blamer-io/bot)
 
-[![Hits-of-Code](https://hitsofcode.com/github/blamer-io/bot)](https://hitsofcode.com/view/github/blamer-io/bot)
-[![Lines-of-Code](https://tokei.rs/b1/github/eo-cqrs/eo-kafka)](https://github.com/blamer-io/bot)
-[![PDD status](http://www.0pdd.com/svg?name=blamer-io/bot)](http://www.0pdd.com/p?name=blamer-io/bot)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/blamer-io/bot/blob/master/LICENSE.txt)
+[![Hits-of-Code](https://hitsofcode.com/github/Blamer-io/bot)](https://hitsofcode.com/view/github/Blamer-io/bot)
+[![Lines-of-Code](https://tokei.rs/b1/github/Blamer-io/bot)](https://github.com/Blamer-io/bot)
+[![PDD status](http://www.0pdd.com/svg?name=Blamer-io/bot)](http://www.0pdd.com/p?name=Blamer-io/bot)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/Blamer-io/bot/blob/master/LICENSE.txt)
 
 Project architect: [@l3r8yJ](https://github.com/l3r8yJ)
 
