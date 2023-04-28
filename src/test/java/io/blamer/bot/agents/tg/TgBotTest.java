@@ -1,6 +1,11 @@
 package io.blamer.bot.agents.tg;
 
+import io.blamer.bot.conversation.Conversation;
+import io.blamer.bot.conversation.routes.Registry;
+import io.blamer.bot.conversation.routes.Start;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -44,7 +49,19 @@ class TgBotTest {
   @Test
   void reactsOnUpdateWithMessage(@Mock final ExtTg ext) {
     final TgBot bot = new TgBot(ext, Collections.emptyMap());
-    Update update = new Update();
+    final Update update = new Update();
+    final Message message = new Message();
+    message.setText("text");
+    update.setMessage(message);
+    Assertions.assertDoesNotThrow(() -> bot.onUpdateReceived(update));
+  }
+
+  @Test
+  void reactsOnUpdateWithConversations(@Mock final ExtTg ext) {
+    final Map<String, Conversation> conversations = new HashMap<>(1);
+    conversations.put("start", new Start());
+    final TgBot bot = new TgBot(ext, conversations);
+    final Update update = new Update();
     final Message message = new Message();
     message.setText("text");
     update.setMessage(message);
