@@ -24,7 +24,6 @@
 
 package io.blamer.bot.agents.tg;
 
-import io.blamer.bot.agents.Bot;
 import io.blamer.bot.conversation.Conversation;
 import jakarta.annotation.PostConstruct;
 import java.util.Map;
@@ -54,7 +53,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TgBot extends TelegramLongPollingBot implements Bot {
+public class TgBot extends TelegramLongPollingBot {
 
   /**
    * Configuration.
@@ -66,9 +65,13 @@ public class TgBot extends TelegramLongPollingBot implements Bot {
    */
   private final Map<String, Conversation> conversations;
 
+  /**
+   * Initialize bot with set of commands.
+   *
+   * @throws TelegramApiException if fails.
+   */
   @PostConstruct
-  @Override
-  public void withCommands() throws TelegramApiException {
+  void initWithCommands() throws TelegramApiException {
     this.execute(
       new SetMyCommands(
         this.conversations.values()
