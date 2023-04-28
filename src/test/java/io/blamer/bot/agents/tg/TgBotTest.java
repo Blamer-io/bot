@@ -1,5 +1,6 @@
 package io.blamer.bot.agents.tg;
 
+import annotation.TestWithSpringContext;
 import io.blamer.bot.conversation.Conversation;
 import io.blamer.bot.conversation.routes.Registry;
 import io.blamer.bot.conversation.routes.Start;
@@ -14,11 +15,20 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 @ExtendWith(MockitoExtension.class)
+@TestWithSpringContext
 class TgBotTest {
+
+  @Autowired
+  private Start start;
+  @Autowired
+  private ExtTg ext;
 
   @Test
   void createsBotWithConfig(@Mock final ExtTg config) {
@@ -57,14 +67,24 @@ class TgBotTest {
   }
 
   @Test
-  void reactsOnUpdateWithConversations(@Mock final ExtTg ext) {
+  void reactsOnUpdateWithConversations() {
     final Map<String, Conversation> conversations = new HashMap<>(1);
-    conversations.put("start", new Start());
-    final TgBot bot = new TgBot(ext, conversations);
+    conversations.put("/start", this.start);
+    final TgBot bot = new TgBot(this.ext, conversations);
     final Update update = new Update();
     final Message message = new Message();
-    message.setText("text");
+    final Chat chat = new Chat();
+    final long id = 1L;
+    chat.setId(id);
+    message.setChat(chat);
+    message.setMessageId(1);
+    message.setText("/start");
     update.setMessage(message);
-    Assertions.assertDoesNotThrow(() -> bot.onUpdateReceived(update));
+    Assertions.assertThrows(
+      TelegramApiRequestException.class,
+      () -> bot.onUpdateReceived(update),
+      "Chat with id %s is not found"
+        .formatted(id)
+    );
   }
 }
