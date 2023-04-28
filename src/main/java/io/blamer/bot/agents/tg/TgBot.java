@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) Copyright (c) 2023 Blamer.io
+ * Copyright (c) 2023 Blamer.io
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +22,9 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.bot;
+package io.blamer.bot.agents.tg;
 
+import io.blamer.bot.agents.Bot;
 import io.blamer.bot.conversation.Conversation;
 import jakarta.annotation.PostConstruct;
 import java.util.Map;
@@ -44,33 +45,33 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
  * */
 
 /**
- * Bot.
+ * Telegram Bot.
+ *
+ * @author Ivan Ivanchuk (l3r8y@duck.com)
+ * @author Aliaksei Bialiauski (abialiausi.dev@gmail.com)
+ * @since 0.0.0
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class Bot extends TelegramLongPollingBot {
+public class TgBot extends TelegramLongPollingBot implements Bot {
 
   /**
    * Configuration.
    */
-  private final BotConfiguration configuration;
+  private final ExtTg configuration;
 
   /**
-   * Generators.
+   * Conversations.
    */
-  private final Map<String, Conversation> generators;
+  private final Map<String, Conversation> conversations;
 
-  /**
-   * Set list of commands.
-   *
-   * @throws TelegramApiException When something went wrong.
-   */
   @PostConstruct
-  void addCommandsDescriptions() throws TelegramApiException {
+  @Override
+  public void withCommands() throws TelegramApiException {
     this.execute(
       new SetMyCommands(
-        this.generators.values()
+        this.conversations.values()
           .stream()
           .map(Conversation::messageAsBotCommand)
           .toList(),
@@ -90,7 +91,7 @@ public class Bot extends TelegramLongPollingBot {
   public void onUpdateReceived(final Update update) {
     if (update.hasMessage()) {
       final Conversation generator =
-        this.generators.get(update.getMessage().getText().split(" ")[0]);
+        this.conversations.get(update.getMessage().getText().split(" ")[0]);
       if (null == generator) {
         return;
       }

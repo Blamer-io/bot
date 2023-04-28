@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) Copyright (c) 2023 Blamer.io
+ * Copyright (c) 2023 Blamer.io
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,46 @@
  * SOFTWARE.
  */
 
+package io.blamer.bot.agents.tg;
+
+import jakarta.annotation.PostConstruct;
+import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
 /**
- * Telegram bot package.
+ * Telegram Extension for {@link TgBot}.
+ * Reads <i>bot</i> properties from <i>application.yaml</i>.
+ *
+ * @author Ivan Ivanchuk (l3r8y@duck.com)
+ * @since 0.0.0
  */
-package io.blamer.bot.bot;
+@Slf4j
+@Data
+@Configuration
+@ConfigurationProperties("bot")
+public class ExtTg {
+
+  /**
+   * Token for Telegram Bots API.
+   */
+  private String token;
+
+  /**
+   * Username in telegram.
+   */
+  private String name;
+
+  /**
+   * A method for checking which configuration is loaded.
+   */
+  @PostConstruct
+  void init() {
+    ExtTg.log.info(
+      "Bot configuration for '{}' loaded with token '{}'",
+      this.name,
+      this.token
+    );
+  }
+}

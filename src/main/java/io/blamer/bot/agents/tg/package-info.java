@@ -23,6 +23,6 @@
  */
 
 /**
- * Root BotApplication package.
+ * Telegram bot package.
  */
-package io.blamer.bot;
+package io.blamer.bot.agents.tg;

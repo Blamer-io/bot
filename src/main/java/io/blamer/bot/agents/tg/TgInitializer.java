@@ -22,7 +22,39 @@
  * SOFTWARE.
  */
 
+package io.blamer.bot.agents.tg;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+
 /**
- * Root BotApplication package.
+ * Telegram Initializer.
+ *
+ * @author Ivan Ivanchuk (l3r8y@duck.com)
+ * @since 0.0.0
  */
-package io.blamer.bot;
+@Component
+@RequiredArgsConstructor
+public class TgInitializer {
+
+  /**
+   * Bot.
+   */
+  private final TgBot bot;
+
+  /**
+   * Initializes the bot.
+   *
+   * @throws TelegramApiException if fails.
+   */
+  @EventListener({ContextRefreshedEvent.class})
+  public void initializeBot() throws TelegramApiException {
+    final TelegramBotsApi api = new TelegramBotsApi(DefaultBotSession.class);
+    api.registerBot(this.bot);
+  }
+}

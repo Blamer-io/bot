@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) Copyright (c) 2023 Blamer.io
+ * Copyright (c) 2023 Blamer.io
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,36 +22,22 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.bot;
+package io.blamer.bot.agents;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 /**
- * Bot initializer.
+ * Bot.
+ *
+ * @author Aliaksei Bialiauski (abialiausi.dev@gmail.com)
+ * @since 0.0.0
  */
-@Component
-@RequiredArgsConstructor
-public class BotInitializer {
+public interface Bot {
 
   /**
-   * Bot.
-   */
-  private final Bot bot;
-
-  /**
-   * Initializes the bot.
+   * Set list of commands.
    *
    * @throws TelegramApiException if fails.
    */
-  @EventListener({ContextRefreshedEvent.class})
-  public void initializeBot() throws TelegramApiException {
-    final TelegramBotsApi api = new TelegramBotsApi(DefaultBotSession.class);
-    api.registerBot(this.bot);
-  }
+  void withCommands() throws TelegramApiException;
 }
