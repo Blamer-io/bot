@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) Copyright (c) 2023 Blamer.io
+ * Copyright (c) 2023 Blamer.io
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,6 +35,9 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
 /**
  * Registry conversation.
+ *
+ * @author Ivan Ivanchuk (l3r8y@duck.com)
+ * @since 0.0.0
  */
 @Slf4j
 @Component("/registry")
