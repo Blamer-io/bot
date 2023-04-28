@@ -22,9 +22,8 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.answer.generator.impl;
+package io.blamer.bot.conversation;
 
-import io.blamer.bot.answer.generator.MessageGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -34,12 +33,12 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
 /**
- * Start conversation.
+ * Registry conversation.
  */
 @Slf4j
 @Component("/registry")
 @PropertySource("classpath:answers.properties")
-public class RegistryMessageGenerator implements MessageGenerator {
+public class Registry implements Conversation {
 
   /**
    * The command.
@@ -61,7 +60,9 @@ public class RegistryMessageGenerator implements MessageGenerator {
   public SendMessage messageFromUpdate(final Update update) {
     SendMessage result;
     final String text = update.getMessage().getText();
-    final String chat = update.getMessage().getChatId().toString();
+    final String chat = String.valueOf(
+      update.getMessage().getChatId()
+    );
     try {
       final String token = text.split(" ")[1];
       result = resultFrom(chat, token);
@@ -79,11 +80,9 @@ public class RegistryMessageGenerator implements MessageGenerator {
   /**
    * The resultFrom function takes a chat and token as parameters,
    * then returns a SendMessage object with the chat ID and message text.
-
    *
-   * @param chat Send the message to a specific chat
+   * @param chat  Send the message to a specific chat
    * @param token Pass the token to the resultfrom function
-   *
    * @return A SendMessage object
    */
   private static SendMessage resultFrom(
@@ -106,7 +105,6 @@ public class RegistryMessageGenerator implements MessageGenerator {
    *
    * @param text Provide the user with a message about what went wrong
    * @param chat Specify the chat id of the user that sent the message
-   *
    * @return A SendMessage object
    */
   private static SendMessage resultWithError(
@@ -114,7 +112,7 @@ public class RegistryMessageGenerator implements MessageGenerator {
     final String chat
   ) {
     final String notFound = "Token not found in %s".formatted(text);
-    RegistryMessageGenerator.log.debug(notFound);
+    Registry.log.debug(notFound);
     return new SendMessage(chat, notFound);
   }
 }

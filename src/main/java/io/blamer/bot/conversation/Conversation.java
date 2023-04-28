@@ -22,51 +22,47 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.answer.generator.impl;
+package io.blamer.bot.conversation;
 
-import io.blamer.bot.answer.generator.MessageGenerator;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
 /**
- * Start conversation.
+ * This interface created for solution of infinity switch-case.
+ * <pre>{@code
+ * @Component("/example")
+ * public class Example implements Conversation {
+ *      @Override
+ *      public SendMessage messageFromUpdate(final Update update) {
+ *          final SendMessage sendMessage = new SendMessage();
+ *          sendMessage.setChatId(update.getMessage().getChatId());
+ *          sendMessage.setText("Text for message");
+ *          return sendMessage;
+ *      }
+ *
+ *      @Override
+ *      public BotCommand messageAsBotCommand() {
+ *          return new BotCommand("/example", "Description for example command")
+ *      }
+ * }
+ * }</pre>
+ * implNote All implementations of this Interface <b>have to</b>
+ * be annotated with <code>@Component("/command")</code> annotation.
+ * Otherwise, it's just won't add a new command handling.
  */
-@Component("/start")
-@PropertySource("classpath:answers.properties")
-public class StartMessageGenerator implements MessageGenerator {
+public interface Conversation {
 
-  /**
-   * Answer message.
-   */
-  @Value("${answers.start.message}")
-  private String message;
+    /**
+     * Creates message to handle with specific command.
+     *
+     * @param update The update to handle
+     * @return SendMessage event
+     */
+    SendMessage messageFromUpdate(Update update);
 
-  /**
-   * The command.
-   */
-  @Value("${answers.start.command}")
-  private String command;
-
-  /**
-   * Command description.
-   */
-  @Value("${answers.start.description}")
-  private String description;
-
-  @Override
-  public SendMessage messageFromUpdate(final Update update) {
-    return new SendMessage(
-      update.getMessage().getChatId().toString(),
-      this.message
-    );
-  }
-
-  @Override
-  public BotCommand messageAsBotCommand() {
-    return new BotCommand(this.command, this.description);
-  }
+    /**
+     * @return Description of this command.
+     */
+    BotCommand messageAsBotCommand();
 }

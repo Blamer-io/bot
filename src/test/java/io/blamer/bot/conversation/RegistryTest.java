@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.answer.generator.impl;
+package io.blamer.bot.conversation;
 
 import annotation.TestWithSpringContext;
 import org.hamcrest.MatcherAssert;
@@ -34,37 +34,53 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
 @TestWithSpringContext
 @ExtendWith(MockitoExtension.class)
-class StartMessageGeneratorTest {
+class RegistryTest {
 
-  @Autowired
-  private StartMessageGenerator messageGenerator;
+    @Autowired
+    private Registry messageGenerator;
 
-  @Test
-  void createsStartMessage(@Mock final Update update, @Mock final Message message) {
-    Mockito.when(update.getMessage()).thenReturn(message);
-    Assertions.assertNotNull(messageGenerator.messageFromUpdate(update));
-    MatcherAssert.assertThat(
-      "Response contains right text",
-      messageGenerator.messageFromUpdate(update).getText(),
-      Matchers.equalTo("test start message")
-    );
-  }
+    @Test
+    void createsRegistryMessage(@Mock final Update update, @Mock final Message message) {
+        final String token = "tkn";
+        final String template = "Registry token doesn't available yet, sorry. Your token: '%s'";
+        Mockito.when(message.getText()).thenReturn("/registry tkn");
+        Mockito.when(update.getMessage()).thenReturn(message);
+        Assertions.assertNotNull(messageGenerator.messageFromUpdate(update));
+        MatcherAssert.assertThat(
+            "Response contains right text",
+            messageGenerator.messageFromUpdate(update).getText(),
+            Matchers.equalTo(template.formatted(token))
+        );
+    }
 
-  @Test
-  void createsDescription() {
-    final BotCommand actual = this.messageGenerator.messageAsBotCommand();
-    MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/start"));
-    MatcherAssert.assertThat(
-      actual.getDescription(),
-      Matchers.equalTo("test start description")
-    );
-  }
+    @Test
+    void createsRegistryMessageWithError(@Mock final Update update, @Mock final Message message) {
+        final String expected = "Token not found in /registry";
+        Mockito.when(message.getText()).thenReturn("/registry");
+        Mockito.when(update.getMessage()).thenReturn(message);
+        final SendMessage actual = messageGenerator.messageFromUpdate(update);
+        Assertions.assertNotNull(actual);
+        MatcherAssert.assertThat(
+            "Response contains right text",
+            actual.getText(),
+            Matchers.equalTo(expected)
+        );
+    }
+
+    @Test
+    void createsBotCommand() {
+        final BotCommand actual = this.messageGenerator.messageAsBotCommand();
+        MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/registry"));
+        MatcherAssert.assertThat(
+            actual.getDescription(),
+            Matchers.equalTo("test registry description")
+        );
+    }
 }

@@ -24,9 +24,9 @@
 
 package io.blamer.bot.bot;
 
-import io.blamer.bot.answer.generator.MessageGenerator;
-import io.blamer.bot.configuration.BotConfiguration;
+import io.blamer.bot.conversation.Conversation;
 import jakarta.annotation.PostConstruct;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +37,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import java.util.Map;
 
 /*
  * @todo #4 Find way to test this
@@ -61,7 +59,7 @@ public class Bot extends TelegramLongPollingBot {
   /**
    * Generators.
    */
-  private final Map<String, MessageGenerator> generators;
+  private final Map<String, Conversation> generators;
 
   /**
    * Set list of commands.
@@ -74,7 +72,7 @@ public class Bot extends TelegramLongPollingBot {
       new SetMyCommands(
         this.generators.values()
           .stream()
-          .map(MessageGenerator::messageAsBotCommand)
+          .map(Conversation::messageAsBotCommand)
           .toList(),
         new BotCommandScopeDefault(),
         null
@@ -91,7 +89,7 @@ public class Bot extends TelegramLongPollingBot {
   @Override
   public void onUpdateReceived(final Update update) {
     if (update.hasMessage()) {
-      final MessageGenerator generator =
+      final Conversation generator =
         this.generators.get(update.getMessage().getText().split(" ")[0]);
       if (null == generator) {
         return;

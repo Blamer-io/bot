@@ -1,6 +1,5 @@
 package io.blamer.bot.bot;
 
-import io.blamer.bot.configuration.BotConfiguration;
 import java.util.Collections;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;

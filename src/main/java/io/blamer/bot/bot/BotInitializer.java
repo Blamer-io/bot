@@ -22,9 +22,36 @@
  * SOFTWARE.
  */
 
-/**
- * @author Aliaksei Bialiauski (abialiauski.dev@gmail.com)
- * @since 0.0.0
- */
+package io.blamer.bot.bot;
 
-package io.blamer.bot.answer.generator.impl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
+import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+
+/**
+ * Bot initializer.
+ */
+@Component
+@RequiredArgsConstructor
+public class BotInitializer {
+
+  /**
+   * Bot.
+   */
+  private final Bot bot;
+
+  /**
+   * Initializes the bot.
+   *
+   * @throws TelegramApiException if fails.
+   */
+  @EventListener({ContextRefreshedEvent.class})
+  public void initializeBot() throws TelegramApiException {
+    final TelegramBotsApi api = new TelegramBotsApi(DefaultBotSession.class);
+    api.registerBot(this.bot);
+  }
+}

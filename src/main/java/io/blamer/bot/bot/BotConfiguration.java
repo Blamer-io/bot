@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.configuration;
+package io.blamer.bot.bot;
 
 import jakarta.annotation.PostConstruct;
 import lombok.Data;

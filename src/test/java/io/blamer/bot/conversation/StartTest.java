@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.answer.generator.impl;
+package io.blamer.bot.conversation;
 
 import annotation.TestWithSpringContext;
 import org.hamcrest.MatcherAssert;
@@ -40,29 +40,29 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
 @TestWithSpringContext
 @ExtendWith(MockitoExtension.class)
-class TokenMessageGeneratorTest {
+class StartTest {
 
   @Autowired
-  private TokenMessageGenerator tokenMessageGenerator;
+  private Start messageGenerator;
 
   @Test
   void createsStartMessage(@Mock final Update update, @Mock final Message message) {
     Mockito.when(update.getMessage()).thenReturn(message);
-    Assertions.assertNotNull(this.tokenMessageGenerator.messageFromUpdate(update));
+    Assertions.assertNotNull(messageGenerator.messageFromUpdate(update));
     MatcherAssert.assertThat(
-      "Response in context right text",
-      this.tokenMessageGenerator.messageFromUpdate(update).getText(),
-      Matchers.equalTo("test token message")
+      "Response contains right text",
+      messageGenerator.messageFromUpdate(update).getText(),
+      Matchers.equalTo("test start message")
     );
   }
 
   @Test
   void createsDescription() {
-    final BotCommand actual = this.tokenMessageGenerator.messageAsBotCommand();
-    MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/token"));
+    final BotCommand actual = this.messageGenerator.messageAsBotCommand();
+    MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/start"));
     MatcherAssert.assertThat(
       actual.getDescription(),
-      Matchers.equalTo("test token description")
+      Matchers.equalTo("test start description")
     );
   }
 }
