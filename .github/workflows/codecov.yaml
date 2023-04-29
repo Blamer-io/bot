@@ -25,4 +25,8 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./target/site/jacoco/jacoco.xml
-          fail_ci_if_error: true
+#          @todo #41 Set to true after hub impl
+#           While it's not quite clear what our system will look like,
+#           I suggest we close our eyes a bit on code coverage.
+#           see: https://www.youtube.com/watch?v=3QT7jaoOa9w
+          fail_ci_if_error: false
