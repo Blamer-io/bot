@@ -1,7 +1,7 @@
 <img src="blamer-bot.svg" width="150" alt="blamer-bot"/>
 
 [![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
-[![DevOps By Rultor.com](https://www.rultor.com/b/blamer-io/bot)](https://www.rultor.com/p/blamer-io/bot)
+[![DevOps By Rultor.com](https://www.rultor.com/b/blamer-io/bot)](https://www.rultor.com/p/Blamer-io/bot)
 [![We recommend IntelliJ IDEA](https://www.elegantobjects.org/intellij-idea.svg)](https://www.jetbrains.com/idea/)
 <br>
 
