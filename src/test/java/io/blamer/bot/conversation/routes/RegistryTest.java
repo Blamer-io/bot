@@ -25,7 +25,6 @@
 package io.blamer.bot.conversation.routes;
 
 import annotation.TestWithSpringContext;
-import io.blamer.bot.conversation.routes.Registry;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -76,7 +75,7 @@ class RegistryTest {
 
     @Test
     void createsBotCommand() {
-        final BotCommand actual = this.messageGenerator.messageAsBotCommand();
+        final BotCommand actual = this.messageGenerator.asBotCommand();
         MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/registry"));
         MatcherAssert.assertThat(
             actual.getDescription(),

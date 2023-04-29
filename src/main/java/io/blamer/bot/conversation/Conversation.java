@@ -64,5 +64,5 @@ public interface Conversation {
     /**
      * @return Description of this command.
      */
-    BotCommand messageAsBotCommand();
+    BotCommand asBotCommand();
 }

@@ -90,7 +90,7 @@ public class Registry implements Conversation {
   }
 
   @Override
-  public BotCommand messageAsBotCommand() {
+  public BotCommand asBotCommand() {
     return new BotCommand(this.command, this.description);
   }
 }

@@ -77,7 +77,7 @@ public class TgBot extends TelegramLongPollingBot {
       new SetMyCommands(
         this.conversations.values()
           .stream()
-          .map(Conversation::messageAsBotCommand)
+          .map(Conversation::asBotCommand)
           .peek(cmd -> TgBot.log.info("defined {}", cmd))
           .toList(),
         new BotCommandScopeDefault(),
