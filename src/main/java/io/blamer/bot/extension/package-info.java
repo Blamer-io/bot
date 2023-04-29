@@ -25,4 +25,4 @@
 /**
  * Application configuration package.
  */
-package io.blamer.bot.configuration;
+package io.blamer.bot.extension;

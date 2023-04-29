@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.configuration;
+package io.blamer.bot.extension;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +42,7 @@ import java.time.Duration;
 @Data
 @Configuration
 @ConfigurationProperties("hub")
-public class RSocketConfiguration {
+public class ExtRSocket {
 
   /**
    * Number of reconnection attempts.
@@ -74,7 +74,7 @@ public class RSocketConfiguration {
   public RSocketRequester rSocketRequester(
     final RSocketRequester.Builder builder
   ) {
-    RSocketConfiguration.log.info(
+    ExtRSocket.log.info(
       "Configuring connection to Hub[{}:{}]",
       this.host,
       this.port
@@ -84,8 +84,8 @@ public class RSocketConfiguration {
         connector ->
           connector.reconnect(
             Retry.fixedDelay(
-              RSocketConfiguration.RECONNECT_ATTEMPTS,
-              Duration.ofSeconds(RSocketConfiguration.CONNECT_TIMEOUT)
+              ExtRSocket.RECONNECT_ATTEMPTS,
+              Duration.ofSeconds(ExtRSocket.CONNECT_TIMEOUT)
             )
           )
       )

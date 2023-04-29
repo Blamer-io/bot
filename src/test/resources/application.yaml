@@ -2,5 +2,6 @@ bot:
   token: ${BOT_TOKEN}
   name: ${BOT_NAME}
 hub:
-  host: localhost
-  port: 7070
+  host: ${HUB_HOST}
+  port: ${HUB_PORT}
+
