@@ -25,7 +25,6 @@
 package io.blamer.bot.conversation.routes;
 
 import annotation.TestWithSpringContext;
-import io.blamer.bot.conversation.routes.Start;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -59,7 +58,7 @@ class StartTest {
 
   @Test
   void createsDescription() {
-    final BotCommand actual = this.messageGenerator.messageAsBotCommand();
+    final BotCommand actual = this.messageGenerator.asBotCommand();
     MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/start"));
     MatcherAssert.assertThat(
       actual.getDescription(),

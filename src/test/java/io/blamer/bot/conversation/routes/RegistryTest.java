@@ -25,7 +25,6 @@
 package io.blamer.bot.conversation.routes;
 
 import annotation.TestWithSpringContext;
-import io.blamer.bot.conversation.routes.Registry;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -49,27 +48,26 @@ class RegistryTest {
 
     @Test
     void createsRegistryMessage(@Mock final Update update, @Mock final Message message) {
-        final String token = "tkn";
-        final String template = "Registry token doesn't available yet, sorry. Your token: '%s'";
+        final String expected = "`Retries exhausted: 3/3`";
         Mockito.when(message.getText()).thenReturn("/registry tkn");
         Mockito.when(update.getMessage()).thenReturn(message);
-        Assertions.assertNotNull(messageGenerator.messageFromUpdate(update));
+        Assertions.assertNotNull(this.messageGenerator.messageFromUpdate(update));
         MatcherAssert.assertThat(
-            "Response contains right text",
-            messageGenerator.messageFromUpdate(update).getText(),
-            Matchers.equalTo(template.formatted(token))
+          "Response contains right text",
+          this.messageGenerator.messageFromUpdate(update).getText(),
+          Matchers.equalTo(expected)
         );
     }
 
     @Test
     void createsRegistryMessageWithError(@Mock final Update update, @Mock final Message message) {
-        final String expected = "Token not found in /registry";
+        final String expected = "`Retries exhausted: 3/3`";
         Mockito.when(message.getText()).thenReturn("/registry");
         Mockito.when(update.getMessage()).thenReturn(message);
-        final SendMessage actual = messageGenerator.messageFromUpdate(update);
+        final SendMessage actual = this.messageGenerator.messageFromUpdate(update);
         Assertions.assertNotNull(actual);
         MatcherAssert.assertThat(
-            "Response contains right text",
+          "Response contains right text",
             actual.getText(),
             Matchers.equalTo(expected)
         );
@@ -77,7 +75,7 @@ class RegistryTest {
 
     @Test
     void createsBotCommand() {
-        final BotCommand actual = this.messageGenerator.messageAsBotCommand();
+        final BotCommand actual = this.messageGenerator.asBotCommand();
         MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/registry"));
         MatcherAssert.assertThat(
             actual.getDescription(),

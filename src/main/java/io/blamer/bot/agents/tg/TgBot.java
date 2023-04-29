@@ -26,7 +26,6 @@ package io.blamer.bot.agents.tg;
 
 import io.blamer.bot.conversation.Conversation;
 import jakarta.annotation.PostConstruct;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +36,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.Map;
 
 /*
  * @todo #4 Find way to test this
@@ -83,7 +84,8 @@ public class TgBot extends TelegramLongPollingBot {
       new SetMyCommands(
         this.conversations.values()
           .stream()
-          .map(Conversation::messageAsBotCommand)
+          .map(Conversation::asBotCommand)
+          .peek(cmd -> TgBot.log.info("defined {}", cmd))
           .toList(),
         new BotCommandScopeDefault(),
         "en"

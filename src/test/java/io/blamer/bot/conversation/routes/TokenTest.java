@@ -25,7 +25,6 @@
 package io.blamer.bot.conversation.routes;
 
 import annotation.TestWithSpringContext;
-import io.blamer.bot.conversation.routes.Token;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -59,7 +58,7 @@ class TokenTest {
 
   @Test
   void createsDescription() {
-    final BotCommand actual = this.tokenMessageGenerator.messageAsBotCommand();
+    final BotCommand actual = this.tokenMessageGenerator.asBotCommand();
     MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/token"));
     MatcherAssert.assertThat(
       actual.getDescription(),

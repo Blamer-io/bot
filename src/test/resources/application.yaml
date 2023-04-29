@@ -1,3 +1,7 @@
 bot:
   token: ${BOT_TOKEN}
   name: ${BOT_NAME}
+hub:
+  host: ${HUB_HOST}
+  port: ${HUB_PORT}
+

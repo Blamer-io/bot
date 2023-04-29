@@ -25,9 +25,13 @@
 package io.blamer.bot.conversation.routes;
 
 import io.blamer.bot.conversation.Conversation;
+import io.blamer.bot.reponse.RegistryResponse;
+import io.blamer.bot.request.RegistryRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -41,6 +45,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
  */
 @Slf4j
 @Component("/registry")
+@RequiredArgsConstructor
 @PropertySource("classpath:answers.properties")
 public class Registry implements Conversation {
 
@@ -56,67 +61,36 @@ public class Registry implements Conversation {
   @Value("${answers.registry.description}")
   private String description;
 
-  /*
-   * @todo #19 After hub service will be created, redirect the token.
-   *   Send auth message to hub, to process the data.
-   * */
+  /**
+   * The requester.
+   */
+  private final RSocketRequester requester;
+
   @Override
   public SendMessage messageFromUpdate(final Update update) {
-    SendMessage result;
-    final String text = update.getMessage().getText();
-    final String chat = String.valueOf(
-      update.getMessage().getChatId()
-    );
+    final String chat = String.valueOf(update.getMessage().getChatId());
     try {
-      final String token = text.split(" ")[1];
-      result = resultFrom(chat, token);
-    } catch (final ArrayIndexOutOfBoundsException ex) {
-      result = resultWithError(text, chat);
+      final String token = update.getMessage().getText()
+        .replace("/registry", " ")
+        .strip();
+      return this.requester
+        .route("hub.auth")
+        .data(new RegistryRequest(token, chat))
+        .retrieveMono(RegistryResponse.class)
+        .map(auth -> new SendMessage(auth.getChat(), auth.getText()))
+        .block();
+    } catch (final RuntimeException ex) {
+      final SendMessage error = new SendMessage(
+        chat,
+        "`%s`".formatted(ex.getMessage())
+      );
+      error.enableMarkdown(true);
+      return error;
     }
-    return result;
   }
 
   @Override
-  public BotCommand messageAsBotCommand() {
+  public BotCommand asBotCommand() {
     return new BotCommand(this.command, this.description);
-  }
-
-  /**
-   * The resultFrom function takes a chat and token as parameters,
-   * then returns a SendMessage object with the chat ID and message text.
-   *
-   * @param chat  Send the message to a specific chat
-   * @param token Pass the token to the resultfrom function
-   * @return A SendMessage object
-   */
-  private static SendMessage resultFrom(
-    final String chat,
-    final String token
-  ) {
-    return new SendMessage(
-      chat,
-      "Registry token doesn't available yet, sorry. Your token: '%s'"
-        .formatted(token)
-    );
-  }
-
-  /**
-   * The resultWithError function is a helper function that
-   * returns a SendMessage object with the
-   * text &quot;Token not found in %s&quot;.formatted(text)
-   * and the chat ID of chat.
-   * <p>
-   *
-   * @param text Provide the user with a message about what went wrong
-   * @param chat Specify the chat id of the user that sent the message
-   * @return A SendMessage object
-   */
-  private static SendMessage resultWithError(
-    final String text,
-    final String chat
-  ) {
-    final String notFound = "Token not found in %s".formatted(text);
-    Registry.log.debug(notFound);
-    return new SendMessage(chat, notFound);
   }
 }
