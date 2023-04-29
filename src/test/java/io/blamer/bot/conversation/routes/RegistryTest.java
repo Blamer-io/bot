@@ -49,7 +49,7 @@ class RegistryTest {
 
     @Test
     void createsRegistryMessage(@Mock final Update update, @Mock final Message message) {
-        final String expected = "Internal error: Retries exhausted: 3/3";
+        final String expected = "`Retries exhausted: 3/3`";
         Mockito.when(message.getText()).thenReturn("/registry tkn");
         Mockito.when(update.getMessage()).thenReturn(message);
         Assertions.assertNotNull(this.messageGenerator.messageFromUpdate(update));
@@ -62,7 +62,7 @@ class RegistryTest {
 
     @Test
     void createsRegistryMessageWithError(@Mock final Update update, @Mock final Message message) {
-        final String expected = "Internal error: Retries exhausted: 3/3";
+        final String expected = "`Retries exhausted: 3/3`";
         Mockito.when(message.getText()).thenReturn("/registry");
         Mockito.when(update.getMessage()).thenReturn(message);
         final SendMessage actual = this.messageGenerator.messageFromUpdate(update);

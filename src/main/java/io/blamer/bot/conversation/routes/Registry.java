@@ -80,10 +80,12 @@ public class Registry implements Conversation {
         .map(auth -> new SendMessage(auth.getChat(), auth.getText()))
         .block();
     } catch (final RuntimeException ex) {
-      return new SendMessage(
+      final SendMessage error = new SendMessage(
         chat,
-        "Internal error: %s".formatted(ex.getMessage())
+        "`%s`".formatted(ex.getMessage())
       );
+      error.enableMarkdown(true);
+      return error;
     }
   }
 
