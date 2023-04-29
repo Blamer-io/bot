@@ -36,6 +36,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import reactor.core.publisher.Mono;
 
 /**
  * Registry conversation.
@@ -67,26 +68,23 @@ public class Registry implements Conversation {
   private final RSocketRequester requester;
 
   @Override
-  public SendMessage messageFromUpdate(final Update update) {
+  public Mono<SendMessage> messageFromUpdate(final Update update) {
     final String chat = String.valueOf(update.getMessage().getChatId());
-    try {
-      final String token = update.getMessage().getText()
-        .replace("/registry", " ")
-        .strip();
-      return this.requester
-        .route("hub.auth")
-        .data(new RegistryRequest(token, chat))
-        .retrieveMono(RegistryResponse.class)
-        .map(auth -> new SendMessage(auth.getChat(), auth.getText()))
-        .block();
-    } catch (final RuntimeException ex) {
-      final SendMessage error = new SendMessage(
-        chat,
-        "`%s`".formatted(ex.getMessage())
-      );
-      error.enableMarkdown(true);
-      return error;
-    }
+    final String token = update.getMessage().getText()
+      .replace("/registry", " ")
+      .strip();
+    return this.requester
+      .route("hub.auth")
+      .data(new RegistryRequest(token, chat))
+      .retrieveMono(RegistryResponse.class)
+      .doOnError(
+        err -> new SendMessage(
+          chat,
+          "`%s`".formatted(err.getMessage())
+        )
+      )
+      .doOnNext(rs -> log.info("retrieved {}", rs))
+      .map(auth -> new SendMessage(auth.getChat(), auth.getMessage()));
   }
 
   @Override

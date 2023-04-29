@@ -102,8 +102,9 @@ public class TgBot extends TelegramLongPollingBot {
       if (null == conversation) {
         return;
       }
-      final SendMessage message = conversation.messageFromUpdate(update);
-      this.execute(message);
+      conversation.messageFromUpdate(update)
+        .doOnNext(this::safeExec)
+        .subscribe();
     }
   }
 
@@ -115,5 +116,10 @@ public class TgBot extends TelegramLongPollingBot {
   @Override
   public String getBotToken() {
     return this.configuration.getToken();
+  }
+
+  @SneakyThrows
+  private void safeExec(final SendMessage message) {
+    this.execute(message);
   }
 }

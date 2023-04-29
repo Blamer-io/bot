@@ -32,6 +32,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
+import reactor.core.publisher.Mono;
 
 /**
  * Token conversation.
@@ -62,14 +63,14 @@ public class Token implements Conversation {
   private String description;
 
   @Override
-  public SendMessage messageFromUpdate(final Update update) {
+  public Mono<SendMessage> messageFromUpdate(final Update update) {
     final SendMessage msg = new SendMessage();
     msg.setChatId(update.getMessage().getChatId());
     final ForceReplyKeyboard markup = new ForceReplyKeyboard();
     markup.setInputFieldPlaceholder("/registry YOUR_TOKEN");
     msg.setReplyMarkup(markup);
     msg.setText(this.message);
-    return msg;
+    return Mono.just(msg);
   }
 
   @Override

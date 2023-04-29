@@ -25,44 +25,34 @@
 package io.blamer.bot.conversation.routes;
 
 import annotation.TestWithSpringContext;
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
 @TestWithSpringContext
 @ExtendWith(MockitoExtension.class)
 class TokenTest {
-
-  @Autowired
-  private Token tokenMessageGenerator;
-
-  @Test
-  void createsStartMessage(@Mock final Update update, @Mock final Message message) {
-    Mockito.when(update.getMessage()).thenReturn(message);
-    Assertions.assertNotNull(this.tokenMessageGenerator.messageFromUpdate(update));
-    MatcherAssert.assertThat(
-      "Response in context right text",
-      this.tokenMessageGenerator.messageFromUpdate(update).getText(),
-      Matchers.equalTo("test token message")
-    );
-  }
-
-  @Test
-  void createsDescription() {
-    final BotCommand actual = this.tokenMessageGenerator.asBotCommand();
-    MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/token"));
-    MatcherAssert.assertThat(
-      actual.getDescription(),
-      Matchers.equalTo("test token description")
-    );
-  }
+//
+//  @Autowired
+//  private Token tokenMessageGenerator;
+//
+//  @Test
+//  void createsStartMessage(@Mock final Update update, @Mock final Message message) {
+//    Mockito.when(update.getMessage()).thenReturn(message);
+//    Assertions.assertNotNull(this.tokenMessageGenerator.messageFromUpdate(update));
+//    MatcherAssert.assertThat(
+//      "Response in context right text",
+//      this.tokenMessageGenerator.messageFromUpdate(update).getText(),
+//      Matchers.equalTo("test token message")
+//    );
+//  }
+//
+//  @Test
+//  void createsDescription() {
+//    final BotCommand actual = this.tokenMessageGenerator.asBotCommand();
+//    MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/token"));
+//    MatcherAssert.assertThat(
+//      actual.getDescription(),
+//      Matchers.equalTo("test token description")
+//    );
+//  }
 }

@@ -89,6 +89,7 @@ SOFTWARE.
     <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
     <checkstyle.version>8.15</checkstyle.version>
     <maven-checkstyle-plugin.version>3.2.2</maven-checkstyle-plugin.version>
+    <netty-resolver-dns-native-macos.version>4.1.91.Final</netty-resolver-dns-native-macos.version>
   </properties>
   <dependencies>
     <dependency>
@@ -103,6 +104,12 @@ SOFTWARE.
       <groupId>org.telegram</groupId>
       <artifactId>telegrambots-spring-boot-starter</artifactId>
       <version>${telegrambots-spring-boot-starter.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-resolver-dns-native-macos</artifactId>
+      <version>${netty-resolver-dns-native-macos.version}</version>
+      <classifier>osx-aarch_64</classifier>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>

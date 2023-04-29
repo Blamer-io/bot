@@ -22,29 +22,36 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.reponse;
+package io.blamer.bot.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import io.blamer.bot.agents.tg.TgBot;
+import io.blamer.bot.message.UpdateMessage;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import reactor.core.publisher.Flux;
 
-/**
- * Response with info about auth status.
- */
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class RegistryResponse {
+@Slf4j
+@RestController
+@RequiredArgsConstructor
+public class BotController {
 
-  /**
-   * Text for auth info message.
-   */
-  private String message;
+  private final TgBot bot;
 
-  /**
-   * Chat to send auth info.
-   */
-  private String chat;
+  @MessageMapping("bot.receive.updates")
+  private void receiveUpdates(final Flux<UpdateMessage> updates) {
+    updates
+      .log()
+      .parallel()
+      .doOnNext(this::safeExecute)
+      .subscribe();
+  }
+
+  @SneakyThrows
+  private void safeExecute(final UpdateMessage upd) {
+    this.bot.execute(new SendMessage(upd.getChat(), upd.getText()));
+  }
 }

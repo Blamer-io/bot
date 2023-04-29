@@ -27,6 +27,7 @@ package io.blamer.bot.conversation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import reactor.core.publisher.Mono;
 
 /**
  * This interface created for solution of infinity switch-case.
@@ -57,9 +58,9 @@ public interface Conversation {
      * Creates message to handle with specific command.
      *
      * @param update The update to handle
-     * @return SendMessage event
+     * @return Mono event
      */
-    SendMessage messageFromUpdate(Update update);
+    Mono<SendMessage> messageFromUpdate(Update update);
 
     /**
      * @return Description of this command.
