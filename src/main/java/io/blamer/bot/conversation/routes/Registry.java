@@ -74,7 +74,7 @@ public class Registry implements Conversation {
         .replace("/registry", " ")
         .strip();
       return this.requester
-        .route("toAuth")
+        .route("hub.auth")
         .data(new RegistryRequest(token, chat))
         .retrieveMono(RegistryResponse.class)
         .map(auth -> new SendMessage(auth.getChat(), auth.getText()))
