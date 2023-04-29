@@ -61,7 +61,14 @@ public class TgBot extends TelegramLongPollingBot {
   private final ExtTg configuration;
 
   /**
-   * Conversations.
+   * Conversations is a bean map, the key is the bean id,
+   * the value is the Conversation bean implementation.
+   * All beans that implement the Conversation interface
+   * have a bean id equal to the text command it handles.
+   * <p>
+   * Spring automatically injects these fields,
+   * allowing us to avoid gigantic <i>if/else</i>
+   * or <i>switch/case</i> constructs.
    */
   private final Map<String, Conversation> conversations;
 
