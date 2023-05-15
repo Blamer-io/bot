@@ -22,7 +22,29 @@
  * SOFTWARE.
  */
 
+package io.blamer.bot.response;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
- * Responses package.
+ * Response with info about auth status.
  */
-package io.blamer.bot.reponse;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class RegistryResponse {
+
+  /**
+   * Text for auth info message.
+   */
+  private String text;
+
+  /**
+   * Chat to send auth info.
+   */
+  private String chat;
+}
