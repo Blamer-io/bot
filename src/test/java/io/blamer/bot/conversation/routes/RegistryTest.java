@@ -43,43 +43,43 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 @ExtendWith(MockitoExtension.class)
 class RegistryTest {
 
-    @Autowired
-    private Registry messageGenerator;
+  @Autowired
+  private Registry messageGenerator;
 
-    @Test
-    void createsRegistryMessage(@Mock final Update update, @Mock final Message message) {
-        final String expected = "`Retries exhausted: 3/3`";
-        Mockito.when(message.getText()).thenReturn("/registry tkn");
-        Mockito.when(update.getMessage()).thenReturn(message);
-        Assertions.assertNotNull(this.messageGenerator.messageFromUpdate(update));
-        MatcherAssert.assertThat(
-          "Response contains right text",
-          this.messageGenerator.messageFromUpdate(update).getText(),
-          Matchers.equalTo(expected)
-        );
-    }
+  @Test
+  void createsRegistryMessage(@Mock final Update update, @Mock final Message message) {
+    final String expected = "`Retries exhausted: 3/3`";
+    Mockito.when(message.getText()).thenReturn("/registry tkn");
+    Mockito.when(update.getMessage()).thenReturn(message);
+    Assertions.assertNotNull(this.messageGenerator.messageFromUpdate(update));
+    MatcherAssert.assertThat(
+      "Response contains right text",
+      this.messageGenerator.messageFromUpdate(update).getText(),
+      Matchers.equalTo(expected)
+    );
+  }
 
-    @Test
-    void createsRegistryMessageWithError(@Mock final Update update, @Mock final Message message) {
-        final String expected = "`Retries exhausted: 3/3`";
-        Mockito.when(message.getText()).thenReturn("/registry");
-        Mockito.when(update.getMessage()).thenReturn(message);
-        final SendMessage actual = this.messageGenerator.messageFromUpdate(update);
-        Assertions.assertNotNull(actual);
-        MatcherAssert.assertThat(
-          "Response contains right text",
-            actual.getText(),
-            Matchers.equalTo(expected)
-        );
-    }
+  @Test
+  void createsRegistryMessageWithError(@Mock final Update update, @Mock final Message message) {
+    final String expected = "`Retries exhausted: 3/3`";
+    Mockito.when(message.getText()).thenReturn("/registry");
+    Mockito.when(update.getMessage()).thenReturn(message);
+    final SendMessage actual = this.messageGenerator.messageFromUpdate(update);
+    Assertions.assertNotNull(actual);
+    MatcherAssert.assertThat(
+      "Response contains right text",
+      actual.getText(),
+      Matchers.equalTo(expected)
+    );
+  }
 
-    @Test
-    void createsBotCommand() {
-        final BotCommand actual = this.messageGenerator.asBotCommand();
-        MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/registry"));
-        MatcherAssert.assertThat(
-            actual.getDescription(),
-            Matchers.equalTo("test registry description")
-        );
-    }
+  @Test
+  void createsBotCommand() {
+    final BotCommand actual = this.messageGenerator.asBotCommand();
+    MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/registry"));
+    MatcherAssert.assertThat(
+      actual.getDescription(),
+      Matchers.equalTo("test registry description")
+    );
+  }
 }

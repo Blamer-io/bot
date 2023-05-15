@@ -4,9 +4,11 @@ import annotation.TestWithSpringContext;
 import io.blamer.bot.conversation.Conversation;
 import io.blamer.bot.conversation.routes.Registry;
 import io.blamer.bot.conversation.routes.Start;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;

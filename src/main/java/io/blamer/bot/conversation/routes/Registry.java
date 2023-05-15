@@ -25,7 +25,7 @@
 package io.blamer.bot.conversation.routes;
 
 import io.blamer.bot.conversation.Conversation;
-import io.blamer.bot.reponse.RegistryResponse;
+import io.blamer.bot.response.RegistryResponse;
 import io.blamer.bot.request.RegistryRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

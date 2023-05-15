@@ -53,16 +53,16 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
  */
 public interface Conversation {
 
-    /**
-     * Creates message to handle with specific command.
-     *
-     * @param update The update to handle
-     * @return SendMessage event
-     */
-    SendMessage messageFromUpdate(Update update);
+  /**
+   * Creates message to handle with specific command.
+   *
+   * @param update The update to handle
+   * @return SendMessage event
+   */
+  SendMessage messageFromUpdate(Update update);
 
-    /**
-     * @return Description of this command.
-     */
-    BotCommand asBotCommand();
+  /**
+   * @return Description of this command.
+   */
+  BotCommand asBotCommand();
 }
