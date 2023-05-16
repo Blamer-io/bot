@@ -19,7 +19,16 @@ Project architect: [@l3r8yJ](https://github.com/l3r8yJ)
 
 A Telegram [@blamer_io_bot](https://t.me/blamer_io_bot) that redirects your GitHub notifications
 
+**Motivation**. We are needed some UI for blamer, chatbot is the most suitable solution for us, here just in Telegram. 
+
 **Principles**. These are the [design principles](https://www.elegantobjects.org/#principles) behind blamer bot.
+
+**How to use**. [Bot](https://t.me/blamer_io_bot) accepts these types of commands:
+```text
+/start - Just start command
+/token - Provide GitHub token with notifications access
+/registry - Token authentication and receiving notifications from GitHub
+```
 
 ## How to Contribute
 
