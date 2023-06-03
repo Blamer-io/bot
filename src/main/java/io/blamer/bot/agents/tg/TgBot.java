@@ -25,6 +25,7 @@
 package io.blamer.bot.agents.tg;
 
 import io.blamer.bot.conversation.Conversation;
+import io.blamer.bot.extension.ExtTg;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -102,7 +103,8 @@ public class TgBot extends TelegramLongPollingBot {
       if (null == conversation) {
         return;
       }
-      conversation.messageFromUpdate(update)
+      conversation
+        .messageFromUpdate(update)
         .doOnNext(this::safeExec)
         .subscribe();
     }

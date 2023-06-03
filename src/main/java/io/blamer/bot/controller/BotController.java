@@ -28,30 +28,31 @@ import io.blamer.bot.agents.tg.TgBot;
 import io.blamer.bot.message.UpdateMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import reactor.core.publisher.Flux;
 
-@Slf4j
-@RestController
+@RestController("/api/v1/bot")
 @RequiredArgsConstructor
 public class BotController {
 
   private final TgBot bot;
 
-  @MessageMapping("bot.receive.updates")
-  private void receiveUpdates(final Flux<UpdateMessage> updates) {
-    updates
+  @ResponseStatus(HttpStatus.ACCEPTED)
+  @PostMapping("/updates")
+  private Flux<Void> receiveUpdates(@RequestBody final Flux<UpdateMessage> updates) {
+    return updates
       .log()
-      .parallel()
       .doOnNext(this::safeExecute)
-      .subscribe();
+      .thenMany(Flux.empty());
   }
 
   @SneakyThrows
   private void safeExecute(final UpdateMessage upd) {
-    this.bot.execute(new SendMessage(upd.getChat(), upd.getText()));
+      this.bot.execute(new SendMessage(upd.getChat(), upd.getText()));
   }
 }

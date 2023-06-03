@@ -3,4 +3,9 @@ bot:
   name: ${BOT_NAME}
 hub:
   host: ${HUB_HOST}
-  port: ${HUB_PORT}
+  rsocket_port: ${HUB_RSOCKET_PORT}
+spring:
+  hub:
+    base-url: ${HUB_BASE_URL}
+server:
+  port: ${BOT_PORT}

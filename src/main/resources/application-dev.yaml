@@ -1,0 +1,11 @@
+bot:
+  token: 6018071095:AAEUVFjD3U3jNp1atDfVdJ2qxUsdkprCfMU
+  name: blamer_dev_io_bot
+spring:
+  hub:
+    base-url: http://localhost:8066
+server:
+  port: 8065
+logging:
+  level:
+    web: debug

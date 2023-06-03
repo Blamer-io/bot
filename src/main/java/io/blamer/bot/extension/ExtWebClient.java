@@ -22,46 +22,28 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.agents.tg;
+package io.blamer.bot.extension;
 
-import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.reactive.function.client.WebClient;
 
 /**
- * Telegram Extension for {@link TgBot}.
- * Reads <i>bot</i> properties from <i>application.yaml</i>.
- *
- * @author Ivan Ivanchuk (l3r8y@duck.com)
- * @since 0.0.0
+ * RSocket config.
  */
 @Slf4j
 @Data
 @Configuration
-@ConfigurationProperties("bot")
-public class ExtTg {
+public class ExtWebClient {
 
-  /**
-   * Token for Telegram Bots API.
-   */
-  private String token;
+  @Value("${spring.hub.base-url}")
+  private String baseUrl;
 
-  /**
-   * Username in telegram.
-   */
-  private String name;
-
-  /**
-   * A method for checking which configuration is loaded.
-   */
-  @PostConstruct
-  void init() {
-    ExtTg.log.info(
-      "Bot configuration for '{}' loaded with token '{}'",
-      this.name,
-      this.token
-    );
+  @Bean
+  public WebClient webClient() {
+    return WebClient.create(this.baseUrl);
   }
 }

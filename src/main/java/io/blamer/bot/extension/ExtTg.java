@@ -24,72 +24,45 @@
 
 package io.blamer.bot.extension;
 
+import io.blamer.bot.agents.tg.TgBot;
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
-import org.springframework.messaging.rsocket.RSocketRequester;
-import reactor.util.retry.Retry;
-
-import java.time.Duration;
 
 /**
- * RSocket config.
+ * Telegram Extension for {@link TgBot}.
+ * Reads <i>bot</i> properties from <i>application.yaml</i>.
+ *
+ * @author Ivan Ivanchuk (l3r8y@duck.com)
+ * @since 0.0.0
  */
 @Slf4j
 @Data
 @Configuration
-@ConfigurationProperties("hub")
-public class ExtRSocket {
+@ConfigurationProperties("bot")
+public class ExtTg {
 
   /**
-   * Number of reconnection attempts.
+   * Token for Telegram Bots API.
    */
-  private static final int RECONNECT_ATTEMPTS = 3;
+  private String token;
 
   /**
-   * Connection timeout time.
+   * Username in telegram.
    */
-  private static final int CONNECT_TIMEOUT = 1;
+  private String name;
 
   /**
-   * Hub host.
+   * A method for checking which configuration is loaded.
    */
-  private String host;
-
-  /**
-   * Hub port.
-   */
-  private int port;
-
-  /**
-   * Configure rsocket to Hub connection.
-   *
-   * @param builder Requester builder
-   * @return Configured builder
-   */
-  @Bean
-  public RSocketRequester rSocketRequester(
-    final RSocketRequester.Builder builder
-  ) {
-    ExtRSocket.log.info(
-      "Configuring connection to Hub[{}:{}]",
-      this.host,
-      this.port
+  @PostConstruct
+  void init() {
+    ExtTg.log.info(
+      "Bot configuration for '{}' loaded with token '{}'",
+      this.name,
+      this.token
     );
-    return builder
-      .rsocketConnector(
-        connector ->
-          connector.reconnect(
-            Retry.fixedDelay(
-              ExtRSocket.RECONNECT_ATTEMPTS,
-              Duration.ofSeconds(ExtRSocket.CONNECT_TIMEOUT)
-            )
-          )
-      )
-      .dataMimeType(MediaType.APPLICATION_CBOR)
-      .tcp(this.host, this.port);
   }
 }

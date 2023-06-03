@@ -31,11 +31,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.messaging.rsocket.RSocketRequester;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -62,10 +64,7 @@ public class Registry implements Conversation {
   @Value("${answers.registry.description}")
   private String description;
 
-  /**
-   * The requester.
-   */
-  private final RSocketRequester requester;
+  private final WebClient webClient;
 
   @Override
   public Mono<SendMessage> messageFromUpdate(final Update update) {
@@ -73,18 +72,20 @@ public class Registry implements Conversation {
     final String token = update.getMessage().getText()
       .replace("/registry", " ")
       .strip();
-    return this.requester
-      .route("hub.auth")
-      .data(new RegistryRequest(token, chat))
-      .retrieveMono(RegistryResponse.class)
+    return this.webClient.post()
+      .uri("/api/v1/hub/auth")
+      .contentType(MediaType.APPLICATION_JSON)
+      .bodyValue(new RegistryRequest(token, chat))
+      .retrieve()
+      .bodyToMono(RegistryResponse.class)
       .doOnError(
         err -> new SendMessage(
           chat,
           "`%s`".formatted(err.getMessage())
         )
       )
-      .doOnNext(rs -> log.info("retrieved {}", rs))
-      .map(auth -> new SendMessage(auth.getChat(), auth.getMessage()));
+      .doOnNext(rs -> log.debug("Retrieved {}", rs))
+      .map(auth -> new SendMessage(auth.getChat(), auth.getText()));
   }
 
   @Override

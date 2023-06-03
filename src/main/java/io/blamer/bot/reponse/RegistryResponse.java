@@ -41,7 +41,7 @@ public class RegistryResponse {
   /**
    * Text for auth info message.
    */
-  private String message;
+  private String text;
 
   /**
    * Chat to send auth info.
