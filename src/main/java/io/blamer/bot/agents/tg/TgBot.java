@@ -37,7 +37,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
 import java.util.Map;
 
 /*
@@ -75,7 +74,7 @@ public class TgBot extends TelegramLongPollingBot {
   private final Map<String, Conversation> conversations;
 
   /**
-   * Initialize bot with set of commands.
+   * Initialize bot with a set of commands.
    *
    * @throws TelegramApiException if fails.
    */
