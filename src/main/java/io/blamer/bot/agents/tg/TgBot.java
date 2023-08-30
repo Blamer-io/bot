@@ -38,6 +38,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.Map;
+import java.util.Optional;
 
 /*
  * @todo #4 Find way to test this
@@ -97,15 +98,17 @@ public class TgBot extends TelegramLongPollingBot {
   @Override
   public void onUpdateReceived(final Update update) {
     if (update.hasMessage()) {
-      final Conversation conversation =
-        this.conversations.get(update.getMessage().getText().split(" ")[0]);
-      if (null == conversation) {
-        return;
-      }
-      conversation
-        .messageFromUpdate(update)
-        .doOnNext(this::safeExec)
-        .subscribe();
+      final Optional<Conversation> conversation = Optional.ofNullable(
+        this.conversations.get(
+          update.getMessage().getText().split(" ")[0]
+        )
+      );
+      conversation.ifPresent(
+        conv ->
+          conv.messageFromUpdate(update)
+            .doOnNext(this::safeExec)
+            .subscribe()
+      );
     }
   }
 
