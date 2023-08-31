@@ -1,4 +1,4 @@
-<img src="blamer-bot.svg" width="150" alt="blamer-bot"/>
+<img src="https://raw.githubusercontent.com/Blamer-io/blamer/main/blamer-bot.svg" width="150" alt="blamer-bot"/>
 
 [![EO principles respected here](https://www.elegantobjects.org/badge.svg)](https://www.elegantobjects.org)
 [![DevOps By Rultor.com](https://www.rultor.com/b/blamer-io/bot)](https://www.rultor.com/p/Blamer-io/bot)
