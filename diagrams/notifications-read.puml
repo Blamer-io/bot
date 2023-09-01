@@ -1,0 +1,21 @@
+@startuml
+title Notifications Read Flow
+actor       TelegramUser as user
+participant Bot as bot
+participant Hub as hub
+queue Broker as broker
+database    Database    as db
+participant Notifications as notifications
+participant GitHub as github
+
+notifications -> hub
+hub -> db: All toggled aliases
+db --> hub: Chat ID:Token, TokenAlias
+hub --> notifications: Chat ID:Token, TokenAlias
+notifications -> github: Polling by token
+github --> notifications: Notifications Stream
+notifications -> broker: Tuple ID, Notifications Stream
+bot -> broker
+broker --> bot: Tuple ID, Notifications Stream
+bot --> user: Chat ID, TokenAlias:Notifications Stream
+@enduml

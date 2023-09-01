@@ -1,0 +1,25 @@
+@startuml
+title Token Validation Process
+actor       TelegramUser as user
+participant Bot as bot
+participant Hub as hub
+database    Database    as db
+participant Notifications as notifications
+participant Auth as auth
+participant GitHub as github
+
+loop every 30 minutes
+ auth -> hub
+ hub -> db: All tokens
+ db --> hub: Chat ID, Tokens
+ hub --> auth: Chat ID, Tokens
+ auth -> github: Validate token
+ github --> auth: Validation status
+ alt Token expired
+     auth -> hub: Chat ID, Token, TokenAlias expired
+     hub -> db: Chat ID, Token, TokenAlias expired status
+         auth -> bot: Chat ID, Token expired
+     bot --> user: Chat ID, Token expired
+  end
+end
+@enduml

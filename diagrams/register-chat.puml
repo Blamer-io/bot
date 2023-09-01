@@ -1,0 +1,11 @@
+@startuml
+title Register Chat ID Flow
+actor       TelegramUser as user
+participant Bot as bot
+participant Hub as hub
+database    Database    as db
+
+user -> bot: /chat-id
+bot -> hub: Chat ID
+hub -> db: Chat ID
+@enduml
