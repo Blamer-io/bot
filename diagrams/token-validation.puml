@@ -4,7 +4,6 @@ actor       TelegramUser as user
 participant Bot as bot
 participant Hub as hub
 database    Database    as db
-participant Notifications as notifications
 participant Auth as auth
 participant GitHub as github
 
