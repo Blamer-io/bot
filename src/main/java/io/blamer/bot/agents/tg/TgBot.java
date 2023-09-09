@@ -38,6 +38,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScope
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.Map;
+import java.util.Optional;
 
 /*
  * @todo #4 Find way to test this
@@ -85,7 +86,7 @@ public class TgBot extends TelegramLongPollingBot {
         this.conversations.values()
           .stream()
           .map(Conversation::asBotCommand)
-          .peek(cmd -> TgBot.log.info("defined {}", cmd))
+          .peek(cmd -> TgBot.log.info("Defined {}", cmd))
           .toList(),
         new BotCommandScopeDefault(),
         "en"
@@ -97,13 +98,23 @@ public class TgBot extends TelegramLongPollingBot {
   @Override
   public void onUpdateReceived(final Update update) {
     if (update.hasMessage()) {
-      final Conversation conversation =
-        this.conversations.get(update.getMessage().getText().split(" ")[0]);
-      if (null == conversation) {
-        return;
-      }
-      final SendMessage message = conversation.messageFromUpdate(update);
-      this.execute(message);
+      final String command = update.getMessage().getText().split(" ")[0];
+      Optional.ofNullable(this.conversations.get(command))
+        .map(
+          conversation ->
+            conversation.messageOf(update)
+              .doOnNext(this::safeExec)
+              .subscribe()
+        ).orElse(
+          () ->
+            this.safeExec(
+              new SendMessage(
+                String.valueOf(update.getMessage().getChatId()),
+                "Unknown command '%s'"
+                  .formatted(command)
+              )
+            )
+        );
     }
   }
 
@@ -115,5 +126,19 @@ public class TgBot extends TelegramLongPollingBot {
   @Override
   public String getBotToken() {
     return this.configuration.getToken();
+  }
+
+  /*
+   * @todo #73:30min\DEV Redesign this method
+   *   I think this is ugly solution, better to redesign it.
+   * */
+  /**
+   * Just stub.
+   *
+   * @param msg The message to send
+   */
+  @SneakyThrows
+  private void safeExec(final SendMessage msg) {
+    this.execute(msg);
   }
 }
