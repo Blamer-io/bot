@@ -40,26 +40,31 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
 @TestWithSpringContext
 @ExtendWith(MockitoExtension.class)
-class StartTest {
+final class StartTest {
 
   @Autowired
-  private Start messageGenerator;
+  private Start messages;
 
   @Test
   void createsStartMessage(@Mock final Update update, @Mock final Message message) {
     Mockito.when(update.getMessage()).thenReturn(message);
-    Assertions.assertNotNull(messageGenerator.messageFromUpdate(update));
+    Assertions.assertNotNull(
+      this.messages.messageOf(update).block()
+    );
     MatcherAssert.assertThat(
       "Response contains right text",
-      messageGenerator.messageFromUpdate(update).getText(),
+      this.messages.messageOf(update).block().getText(),
       Matchers.equalTo("test start message")
     );
   }
 
   @Test
   void createsDescription() {
-    final BotCommand actual = this.messageGenerator.asBotCommand();
-    MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/start"));
+    final BotCommand actual = this.messages.asBotCommand();
+    MatcherAssert.assertThat(
+      actual.getCommand(),
+      Matchers.equalTo("/start")
+    );
     MatcherAssert.assertThat(
       actual.getDescription(),
       Matchers.equalTo("test start description")

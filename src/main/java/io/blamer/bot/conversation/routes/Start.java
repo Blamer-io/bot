@@ -31,6 +31,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import reactor.core.publisher.Mono;
 
 /**
  * Start conversation.
@@ -61,10 +62,12 @@ public class Start implements Conversation {
   private String description;
 
   @Override
-  public SendMessage messageFromUpdate(final Update update) {
-    return new SendMessage(
-      String.valueOf(update.getMessage().getChatId()),
-      this.message
+  public Mono<SendMessage> messageOf(final Update update) {
+    return Mono.just(
+      new SendMessage(
+        String.valueOf(update.getMessage().getChatId()),
+        this.message
+      )
     );
   }
 

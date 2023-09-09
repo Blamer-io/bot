@@ -27,6 +27,7 @@ package io.blamer.bot.conversation.routes;
 import io.blamer.bot.conversation.Conversation;
 import io.blamer.bot.response.RegistryResponse;
 import io.blamer.bot.request.RegistryRequest;
+import io.blamer.bot.text.TokenOf;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import reactor.core.publisher.Mono;
 
 /**
  * Registry conversation.
@@ -61,31 +63,36 @@ public class Registry implements Conversation {
   @Value("${answers.registry.description}")
   private String description;
 
+  /*
+  * @todo #73:45min\DEV Replace RSocket
+  *   We should replace rsocket with websocket
+  * */
   /**
    * The requester.
    */
   private final RSocketRequester requester;
 
   @Override
-  public SendMessage messageFromUpdate(final Update update) {
+  public Mono<SendMessage> messageOf(final Update update) {
     final String chat = String.valueOf(update.getMessage().getChatId());
     try {
-      final String token = update.getMessage().getText()
-        .replace("/registry", " ")
-        .strip();
       return this.requester
         .route("hub.auth")
-        .data(new RegistryRequest(token, chat))
+        .data(
+          new RegistryRequest(
+            new TokenOf(update).asString(),
+            chat
+          )
+        )
         .retrieveMono(RegistryResponse.class)
-        .map(auth -> new SendMessage(auth.getChat(), auth.getText()))
-        .block();
+        .map(auth -> new SendMessage(auth.getChat(), auth.getText()));
     } catch (final RuntimeException ex) {
       final SendMessage error = new SendMessage(
         chat,
         "`%s`".formatted(ex.getMessage())
       );
       error.enableMarkdown(true);
-      return error;
+      return Mono.just(error);
     }
   }
 
