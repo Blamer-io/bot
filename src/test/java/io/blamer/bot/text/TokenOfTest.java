@@ -35,6 +35,10 @@ import org.telegram.telegrambots.meta.api.objects.Update;
  * Test case for {@link TokenOf}.
  */
 final class TokenOfTest {
+
+  /*
+   * @todo #73:30min\DEV Configure checkstyle
+   */
   @Test
   @ExtendWith(UpdateWithTokenExtension.class)
   void takesTokenFromUpdate(final Update update) {

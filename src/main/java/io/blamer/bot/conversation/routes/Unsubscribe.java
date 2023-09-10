@@ -18,25 +18,25 @@ import javax.naming.OperationNotSupportedException;
  * Chat id command.
  */
 @Component("/chatid")
-public class ChatId implements Conversation {
+public class Unsubscribe implements Conversation {
 
   /**
    * The command.
    */
-  @Value("${answers.chat-id.command}")
+  @Value("${answers.unsubscribe.command}")
   private String command;
 
   /**
    * Command description.
    */
-  @Value("${answers.chat-id.description}")
+  @Value("${answers.unsubscribe.description}")
   private String description;
 
   @Override
   public Mono<SendMessage> messageOf(final Update update) {
     return Mono.just(update)
       .map(upd -> upd.getMessage().getChatId())
-      .doOnNext(ChatId::save)
+      .doOnNext(Unsubscribe::forgetChat)
       .map(
         chat ->
           new SendMessage(
@@ -58,10 +58,10 @@ public class ChatId implements Conversation {
   /**
    * Stub.
    *
-   * @param chat Chat to save
+   * @param chat Chat to forgetChat
    */
   @SneakyThrows
-  private static void save(final Long chat) {
-    throw new OperationNotSupportedException("#save not implemented yet");
+  private static void forgetChat(final Long chat) {
+    throw new OperationNotSupportedException("#forgetChat not implemented yet");
   }
 }

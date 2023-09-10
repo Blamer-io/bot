@@ -43,7 +43,16 @@ public final class TokenOf implements Text {
    * @param update Update to get token
    */
   public TokenOf(final Update update) {
-    this.origin = update.getMessage().getText();
+    this(update.getMessage().getText());
+  }
+
+  /**
+   * Primary ctor.
+   *
+   * @param message Origin message
+   */
+  public TokenOf(final String message) {
+    this.origin = message;
   }
 
   @Override
