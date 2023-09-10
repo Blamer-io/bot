@@ -33,7 +33,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import java.util.Objects;
 
 /**
- * Extension fot test {@link io.blamer.bot.text.TokenOfTest} suite.
+ * Extension for test {@link io.blamer.bot.text.TokenOfTest} suite.
  */
 public final class UpdateWithTokenExtension implements ParameterResolver {
   @Override
