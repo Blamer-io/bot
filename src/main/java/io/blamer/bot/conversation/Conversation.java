@@ -35,7 +35,7 @@ import reactor.core.publisher.Mono;
  * @Component("/example")
  * public class Example implements Conversation {
  *      @Override
- *      public SendMessage messageOf(final Update update) {
+ *      public Mono<SendMessage> messageOf(final Update update) {
  *          final SendMessage sendMessage = new SendMessage();
  *          sendMessage.setChatId(update.getMessage().getChatId());
  *          sendMessage.setText("Text for message");
