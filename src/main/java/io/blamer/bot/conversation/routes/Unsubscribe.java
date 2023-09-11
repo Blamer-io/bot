@@ -52,8 +52,8 @@ public class Unsubscribe implements Conversation {
   }
 
   /*
-  * @todo #73:60min\DEV Persist chat
-  *   When db logic will be implemented, chat-id should be stored in db
+  * @todo #73:60min\DEV Removes chat
+  *   When db logic will be implemented, chat-id should be removed from db
   * */
   /**
    * Stub.
