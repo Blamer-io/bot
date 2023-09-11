@@ -26,7 +26,6 @@ package io.blamer.bot.agents.tg;
 
 import annotation.TestWithSpringContext;
 import io.blamer.bot.conversation.Conversation;
-import io.blamer.bot.conversation.routes.Registry;
 import io.blamer.bot.conversation.routes.Start;
 
 import java.util.Collections;
