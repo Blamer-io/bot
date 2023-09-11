@@ -65,7 +65,7 @@ public class Registry implements Conversation {
 
   /*
   * @todo #73:45min\DEV Replace RSocket
-  *   We should replace rsocket with websocket
+  *   We should replace rsocket with webclient/feign
   * */
   /**
    * The requester.

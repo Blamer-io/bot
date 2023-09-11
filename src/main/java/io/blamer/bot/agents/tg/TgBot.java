@@ -75,7 +75,7 @@ public class TgBot extends TelegramLongPollingBot {
   private final Map<String, Conversation> conversations;
 
   /**
-   * Initialize bot with set of commands.
+   * Initialize bot with a set of commands.
    *
    * @throws TelegramApiException if fails.
    */
