@@ -25,9 +25,9 @@ A Telegram [@blamer_io_bot](https://t.me/blamer_io_bot) that redirects your GitH
 
 **How to use**. [Bot](https://t.me/blamer_io_bot) accepts these types of commands:
 ```text
-/start - Just start command
-/token - Provide GitHub token with notifications access
-/registry - Token authentication and receiving notifications from GitHub
+/start - Just start command.
+/token - Provide GitHub token with notifications access.
+/forget - Forget your Telegram Chat.
 ```
 
 ## How to Contribute

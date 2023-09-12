@@ -83,10 +83,10 @@ final class TokenTest {
   @Test
   void createsBotCommand() {
     final BotCommand actual = this.messages.asBotCommand();
-    MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/registry"));
+    MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/token"));
     MatcherAssert.assertThat(
       actual.getDescription(),
-      Matchers.equalTo("test registry description")
+      Matchers.equalTo("test token description")
     );
   }
 }

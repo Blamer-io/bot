@@ -72,6 +72,9 @@ public class Token implements Conversation {
    */
   private final RSocketRequester requester;
 
+  /*
+   * @todo #73:45min\DEV Push Chat ID and Token to hub
+   * */
   @Override
   public Mono<SendMessage> messageOf(final Update update) {
     final String chat = String.valueOf(update.getMessage().getChatId());

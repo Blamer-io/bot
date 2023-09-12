@@ -12,36 +12,36 @@ import reactor.core.publisher.Mono;
 import javax.naming.OperationNotSupportedException;
 
 /*
- * @todo #73:45min\DEV Create tests for ChatId
+ * @todo #73:45min\DEV Create tests for Forget
  */
 /**
  * Chat id command.
  */
-@Component("/chatid")
-public class Unsubscribe implements Conversation {
+@Component("/forget")
+public class Forget implements Conversation {
 
   /**
    * The command.
    */
-  @Value("${answers.unsubscribe.command}")
+  @Value("${answers.forget.command}")
   private String command;
 
   /**
    * Command description.
    */
-  @Value("${answers.unsubscribe.description}")
+  @Value("${answers.forget.description}")
   private String description;
 
   @Override
   public Mono<SendMessage> messageOf(final Update update) {
     return Mono.just(update)
       .map(upd -> upd.getMessage().getChatId())
-      .doOnNext(Unsubscribe::forgetChat)
+      .doOnNext(Forget::forgetChat)
       .map(
         chat ->
           new SendMessage(
             String.valueOf(chat),
-            "Saving your chat-id..."
+            "Removing your Chat ID from Blamer..."
           )
       );
   }
