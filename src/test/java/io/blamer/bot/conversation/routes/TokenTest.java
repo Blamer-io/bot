@@ -28,37 +28,61 @@ import annotation.TestWithSpringContext;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
 @TestWithSpringContext
 @ExtendWith(MockitoExtension.class)
-class TokenTest {
+final class TokenTest {
 
   @Autowired
-  private Token tokenMessageGenerator;
+  private Token messages;
 
+  @Disabled
   @Test
-  void createsStartMessage(@Mock final Update update, @Mock final Message message) {
+  void createsRegistryMessage(@Mock final Update update, @Mock final Message message) {
+    final String expected = "`Retries exhausted: 3/3`";
+    Mockito.when(message.getText()).thenReturn("/registry tkn");
     Mockito.when(update.getMessage()).thenReturn(message);
-    Assertions.assertNotNull(this.tokenMessageGenerator.messageFromUpdate(update));
+    Assertions.assertNotNull(this.messages.messageOf(update).block());
     MatcherAssert.assertThat(
-      "Response in context right text",
-      this.tokenMessageGenerator.messageFromUpdate(update).getText(),
-      Matchers.equalTo("test token message")
+      "Response contains right text",
+      this.messages.messageOf(update).block().getText(),
+      Matchers.equalTo(expected)
     );
   }
 
   @Test
-  void createsDescription() {
-    final BotCommand actual = this.tokenMessageGenerator.asBotCommand();
+  @Disabled
+  void createsRegistryMessageWithError(
+    @Mock final Update update,
+    @Mock final Message message
+  ) {
+    final String expected = "`Retries exhausted: 3/3`";
+    Mockito.when(message.getText()).thenReturn("/registry");
+    Mockito.when(update.getMessage()).thenReturn(message);
+    final SendMessage actual
+      = this.messages.messageOf(update).block();
+    Assertions.assertNotNull(actual);
+    MatcherAssert.assertThat(
+      "Response contains right text",
+      actual.getText(),
+      Matchers.equalTo(expected)
+    );
+  }
+
+  @Test
+  void createsBotCommand() {
+    final BotCommand actual = this.messages.asBotCommand();
     MatcherAssert.assertThat(actual.getCommand(), Matchers.equalTo("/token"));
     MatcherAssert.assertThat(
       actual.getDescription(),

@@ -22,57 +22,43 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.conversation.routes;
+package io.blamer.bot.text;
 
-import io.blamer.bot.conversation.Conversation;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.cactoos.Text;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import reactor.core.publisher.Mono;
 
 /**
- * Start conversation.
- *
- * @author Ivan Ivanchuk (l3r8y@duck.com)
- * @since 0.0.0
+ * Token from update.
  */
-@Component("/start")
-@PropertySource("classpath:answers.properties")
-public class Start implements Conversation {
+public final class TokenOf implements Text {
 
   /**
-   * Answer message.
+   * Origin text.
    */
-  @Value("${answers.start.message}")
-  private String message;
+  private final String origin;
 
   /**
-   * The command.
+   * Ctor.
+   *
+   * @param update Update to get token
    */
-  @Value("${answers.start.command}")
-  private String command;
+  public TokenOf(final Update update) {
+    this(update.getMessage().getText());
+  }
 
   /**
-   * Command description.
+   * Primary ctor.
+   *
+   * @param message Origin message
    */
-  @Value("${answers.start.description}")
-  private String description;
-
-  @Override
-  public Mono<SendMessage> messageOf(final Update update) {
-    return Mono.just(
-      new SendMessage(
-        String.valueOf(update.getMessage().getChatId()),
-        this.message
-      )
-    );
+  public TokenOf(final String message) {
+    this.origin = message;
   }
 
   @Override
-  public BotCommand asBotCommand() {
-    return new BotCommand(this.command, this.description);
+  public String asString() {
+    return this.origin
+      .replace("/registry", " ")
+      .strip();
   }
 }

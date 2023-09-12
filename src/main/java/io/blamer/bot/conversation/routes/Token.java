@@ -25,29 +25,31 @@
 package io.blamer.bot.conversation.routes;
 
 import io.blamer.bot.conversation.Conversation;
+import io.blamer.bot.response.RegistryResponse;
+import io.blamer.bot.request.RegistryRequest;
+import io.blamer.bot.text.TokenOf;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.messaging.rsocket.RSocketRequester;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ForceReplyKeyboard;
+import reactor.core.publisher.Mono;
 
 /**
- * Token conversation.
+ * Registry conversation.
  *
  * @author Ivan Ivanchuk (l3r8y@duck.com)
  * @since 0.0.0
  */
+@Slf4j
 @Component("/token")
+@RequiredArgsConstructor
 @PropertySource("classpath:answers.properties")
 public class Token implements Conversation {
-
-  /**
-   * Answer message.
-   */
-  @Value("${answers.token.message}")
-  private String message;
 
   /**
    * The command.
@@ -61,15 +63,40 @@ public class Token implements Conversation {
   @Value("${answers.token.description}")
   private String description;
 
+  /*
+  * @todo #73:45min\DEV Replace RSocket
+  *   We should replace rsocket with webclient/feign
+  * */
+  /**
+   * The requester.
+   */
+  private final RSocketRequester requester;
+
+  /*
+   * @todo #73:45min\DEV Push Chat ID and Token to hub
+   * */
   @Override
-  public SendMessage messageFromUpdate(final Update update) {
-    final SendMessage msg = new SendMessage();
-    msg.setChatId(update.getMessage().getChatId());
-    final ForceReplyKeyboard markup = new ForceReplyKeyboard();
-    markup.setInputFieldPlaceholder("/registry YOUR_TOKEN");
-    msg.setReplyMarkup(markup);
-    msg.setText(this.message);
-    return msg;
+  public Mono<SendMessage> messageOf(final Update update) {
+    final String chat = String.valueOf(update.getMessage().getChatId());
+    try {
+      return this.requester
+        .route("hub.auth")
+        .data(
+          new RegistryRequest(
+            new TokenOf(update).asString(),
+            chat
+          )
+        )
+        .retrieveMono(RegistryResponse.class)
+        .map(auth -> new SendMessage(auth.getChat(), auth.getText()));
+    } catch (final RuntimeException ex) {
+      final SendMessage error = new SendMessage(
+        chat,
+        "`%s`".formatted(ex.getMessage())
+      );
+      error.enableMarkdown(true);
+      return Mono.just(error);
+    }
   }
 
   @Override

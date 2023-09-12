@@ -27,6 +27,7 @@ package io.blamer.bot.conversation;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import reactor.core.publisher.Mono;
 
 /**
  * This interface created for solution of infinity switch-case.
@@ -34,7 +35,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
  * @Component("/example")
  * public class Example implements Conversation {
  *      @Override
- *      public SendMessage messageFromUpdate(final Update update) {
+ *      public Mono<SendMessage> messageOf(final Update update) {
  *          final SendMessage sendMessage = new SendMessage();
  *          sendMessage.setChatId(update.getMessage().getChatId());
  *          sendMessage.setText("Text for message");
@@ -42,7 +43,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
  *      }
  *
  *      @Override
- *      public BotCommand messageAsBotCommand() {
+ *      public BotCommand asBotCommand() {
  *          return new BotCommand("/example", "Description for example command")
  *      }
  * }
@@ -54,12 +55,12 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 public interface Conversation {
 
   /**
-   * Creates message to handle with specific command.
+   * Creates a message to handle with specific command.
    *
    * @param update The update to handle
    * @return SendMessage event
    */
-  SendMessage messageFromUpdate(Update update);
+  Mono<SendMessage> messageOf(Update update);
 
   /**
    * @return Description of this command.

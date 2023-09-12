@@ -22,57 +22,37 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.conversation.routes;
+package extension;
 
-import io.blamer.bot.conversation.Conversation;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.junit.jupiter.api.extension.ExtensionContext;
+import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.ParameterResolver;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import reactor.core.publisher.Mono;
+
+import java.util.Objects;
 
 /**
- * Start conversation.
- *
- * @author Ivan Ivanchuk (l3r8y@duck.com)
- * @since 0.0.0
+ * Extension for test {@link io.blamer.bot.text.TokenOfTest} suite.
  */
-@Component("/start")
-@PropertySource("classpath:answers.properties")
-public class Start implements Conversation {
-
-  /**
-   * Answer message.
-   */
-  @Value("${answers.start.message}")
-  private String message;
-
-  /**
-   * The command.
-   */
-  @Value("${answers.start.command}")
-  private String command;
-
-  /**
-   * Command description.
-   */
-  @Value("${answers.start.description}")
-  private String description;
-
+public final class UpdateWithTokenExtension implements ParameterResolver {
   @Override
-  public Mono<SendMessage> messageOf(final Update update) {
-    return Mono.just(
-      new SendMessage(
-        String.valueOf(update.getMessage().getChatId()),
-        this.message
-      )
-    );
+  public boolean supportsParameter(
+    final ParameterContext pctx,
+    final ExtensionContext ectx
+  ) {
+    return Objects.equals(pctx.getParameter().getType(), Update.class);
   }
 
   @Override
-  public BotCommand asBotCommand() {
-    return new BotCommand(this.command, this.description);
+  public Object resolveParameter(
+    final ParameterContext pctx,
+    final ExtensionContext ectx
+  ) {
+    final Update update = new Update();
+    final Message message = new Message();
+    message.setText("/registry token");
+    update.setMessage(message);
+    return update;
   }
 }

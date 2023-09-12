@@ -1,7 +1,7 @@
 /*
  * MIT License
  *
- * Copyright (c) Copyright (c) 2023 Blamer.io
+ * Copyright (c) 2023 Blamer.io
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,52 +22,30 @@
  * SOFTWARE.
  */
 
-package io.blamer.bot.conversation.routes;
+package io.blamer.bot.text;
 
-import annotation.TestWithSpringContext;
+import extension.UpdateWithTokenExtension;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 
-@TestWithSpringContext
-@ExtendWith(MockitoExtension.class)
-final class StartTest {
+/**
+ * Test case for {@link TokenOf}.
+ */
+final class TokenOfTest {
 
-  @Autowired
-  private Start messages;
-
+  /*
+   * @todo #73:30min\DEV Configure checkstyle
+   */
   @Test
-  void createsStartMessage(@Mock final Update update, @Mock final Message message) {
-    Mockito.when(update.getMessage()).thenReturn(message);
-    Assertions.assertNotNull(
-      this.messages.messageOf(update).block()
-    );
+  @ExtendWith(UpdateWithTokenExtension.class)
+  void takesTokenFromUpdate(final Update update) {
     MatcherAssert.assertThat(
-      "Response contains right text",
-      this.messages.messageOf(update).block().getText(),
-      Matchers.equalTo("test start message")
-    );
-  }
-
-  @Test
-  void createsDescription() {
-    final BotCommand actual = this.messages.asBotCommand();
-    MatcherAssert.assertThat(
-      actual.getCommand(),
-      Matchers.equalTo("/start")
-    );
-    MatcherAssert.assertThat(
-      actual.getDescription(),
-      Matchers.equalTo("test start description")
+      "TokenOf should have `token` value",
+      new TokenOf(update).asString(),
+      Matchers.equalTo("token")
     );
   }
 }

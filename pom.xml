@@ -89,6 +89,8 @@ SOFTWARE.
     <maven-surefire-plugin.version>3.0.0</maven-surefire-plugin.version>
     <checkstyle.version>8.15</checkstyle.version>
     <maven-checkstyle-plugin.version>3.2.2</maven-checkstyle-plugin.version>
+    <cactoos.version>0.55.0</cactoos.version>
+    <easy-random-core.version>4.3.0</easy-random-core.version>
   </properties>
   <dependencies>
     <dependency>
@@ -116,6 +118,11 @@ SOFTWARE.
       <optional>true</optional>
     </dependency>
     <dependency>
+      <groupId>org.cactoos</groupId>
+      <artifactId>cactoos</artifactId>
+      <version>${cactoos.version}</version>
+    </dependency>
+    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <optional>true</optional>
@@ -123,6 +130,12 @@ SOFTWARE.
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.jeasy</groupId>
+      <artifactId>easy-random-core</artifactId>
+      <version>${easy-random-core.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
